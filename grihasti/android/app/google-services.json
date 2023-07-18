@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "10767265273",
+    "project_id": "grihasti-19f5f",
+    "storage_bucket": "grihasti-19f5f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:10767265273:android:9562004bfd3dfa26656128",
+        "android_client_info": {
+          "package_name": "com.example.grihasti"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "10767265273-gn7rrojvo4j69h6i6lhpem77k6qvhqbi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJEwzimNpRl_AhlcCv7v8aO7ePvNxYLDs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "10767265273-gn7rrojvo4j69h6i6lhpem77k6qvhqbi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
