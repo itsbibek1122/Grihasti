@@ -5,7 +5,8 @@ import 'package:grihasti/provider/auth_provider.dart';
 import 'package:grihasti/provider/chip_provider.dart';
 import 'package:grihasti/provider/favourite_provider.dart';
 import 'package:grihasti/provider/location_provider.dart';
-import 'package:grihasti/provider/sign_up_auth.dart';
+
+import 'package:grihasti/provider/user_provider.dart';
 import 'package:grihasti/routes/routes.dart';
 import 'package:grihasti/screens/authentication/login_screen.dart';
 import 'package:grihasti/screens/homescreen/homepage.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(create: (context) => FavoritesProvider()),
         ChangeNotifierProvider(create: (context) => ChipOptions()),
         ChangeNotifierProvider(create: (context) => LocationProvider()),

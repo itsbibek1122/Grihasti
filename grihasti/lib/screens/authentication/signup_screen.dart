@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grihasti/provider/auth_provider.dart';
-import 'package:grihasti/provider/sign_up_auth.dart';
+
 import 'package:grihasti/screens/authentication/components/authentication_appbar.dart';
 import 'package:grihasti/screens/authentication/components/my_button.dart';
 import 'package:grihasti/screens/authentication/components/my_textfield.dart';

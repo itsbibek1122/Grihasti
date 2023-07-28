@@ -4,12 +4,16 @@ class AddPropTextField extends StatelessWidget {
   final String hintText;
   final controller;
   final keyboardtype;
+  final readOnly;
+  final enabled;
 
   const AddPropTextField({
     super.key,
     required this.hintText,
     this.controller,
     this.keyboardtype,
+    this.readOnly,
+    this.enabled,
   });
 
   @override
@@ -18,6 +22,8 @@ class AddPropTextField extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
         keyboardType: keyboardtype,
+        readOnly: false,
+        enabled: enabled,
         controller: controller,
         decoration: InputDecoration(
           enabledBorder: const OutlineInputBorder(

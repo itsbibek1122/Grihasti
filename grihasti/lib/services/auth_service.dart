@@ -5,7 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:grihasti/provider/user_provider.dart';
 import 'package:grihasti/utils/showSnackBar.dart';
+import 'package:provider/provider.dart';
 
 class FirebaseAuthMethods {
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -23,6 +25,8 @@ class FirebaseAuthMethods {
     required String password,
     required BuildContext context,
   }) async {
+    // Once user is logged in and you have the user ID
+
     try {
       UserCredential userCredential = await _auth
           .createUserWithEmailAndPassword(email: email, password: password);
@@ -92,6 +96,13 @@ class FirebaseAuthMethods {
     required String password,
     required BuildContext context,
   }) async {
+    String userId = _auth.currentUser!.uid;
+    // Store the user ID in the provider
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+    userProvider.setUserId(userId);
+    print('The user id from auth service is :${userId}');
+
     try {
       await _auth.signInWithEmailAndPassword(
         email: email,

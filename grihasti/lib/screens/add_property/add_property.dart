@@ -1,9 +1,14 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:grihasti/provider/chip_provider.dart';
+import 'package:grihasti/provider/user_provider.dart';
 import 'package:grihasti/screens/add_property/add_prop_textfield.dart';
+import 'package:grihasti/screens/add_property/components/user_repository.dart';
 import 'package:grihasti/screens/add_property/maps.dart';
+import 'package:grihasti/screens/add_property/model/property_model.dart';
+import 'package:grihasti/screens/add_property/model/submit.dart';
 import 'package:grihasti/screens/authentication/components/my_button.dart';
 
 import 'package:grihasti/screens/homescreen/components/custom_drawer.dart';
@@ -26,16 +31,70 @@ class AddProperty extends StatefulWidget {
 }
 
 class _AddPropertyState extends State<AddProperty> {
-  final controller = MultiImagePickerController(
+  final imgcontroller = MultiImagePickerController(
     maxImages: 5,
     withReadStream: true,
     allowedImageTypes: ['png', 'jpg', 'jpeg'],
   );
 
+  TextEditingController ownerName = TextEditingController();
+  final TextEditingController ownerNumber = TextEditingController();
+  final TextEditingController propertyTitle = TextEditingController();
+  final TextEditingController price = TextEditingController();
+  final TextEditingController detailedLocation = TextEditingController();
+  final TextEditingController propertyDescription = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     ChipOptions chipOptions = Provider.of<ChipOptions>(context);
     final locationProvider = Provider.of<LocationProvider>(context);
+    final userId = Provider.of<UserProvider>(context).userId;
+
+    void onSubmitForm() {
+      // Collect the form data and create a PropertyData object
+      PropertyData propertyData = PropertyData(
+        // Populate the properties with the form values
+        // (You'll need to adjust this based on your actual form fields)
+        ownerName: ownerName.text,
+        ownerNumber: ownerNumber.text,
+        // city: selectedCity,
+        propertyTitle: propertyTitle.text,
+        price: price.text,
+        // purpose: selectedPurpose,
+        detailedLocation: detailedLocation.text,
+        propertyDescription: propertyDescription.text,
+        latitude: locationProvider.selectedLocation!.latitude,
+        longitude: locationProvider.selectedLocation!.longitude,
+        // imageUrls: selectedImageUrls, // List of image URLs selected by the user
+      );
+
+      // Call the FirebaseService method to save the data
+      FirebaseService.savePropertyData(propertyData);
+    }
+
+    // void submitFormToFirebase() {
+    //   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+    //   // Generate a unique ID for the property
+    //   String propertyId = _firestore.collection('properties').doc().id;
+
+    //   Map<String, dynamic> formData = {
+    //     'ownerName': ownerName,
+    //     'ownerNumber': ownerNumber,
+    //     // 'city': selectedCity,
+    //     'propertyTitle': propertyTitle,
+    //     'price': price,
+    //     // 'purpose': selectedPurpose,
+    //     'detailedLocation': detailedLocation,
+    //     'propertyDescription': propertyDescription,
+    //     'latitude': (locationProvider.selectedLocation!.latitude),
+    //     'longitude': locationProvider.selectedLocation!.longitude,
+    //     'userId': userId,
+    //   };
+
+    //   // Save the data to Firestore under the 'properties' collection with the generated ID
+    //   _firestore.collection('properties').doc(propertyId).set(formData);
+    // }
 
     return Scaffold(
       appBar: MyAppBar(
@@ -53,10 +112,12 @@ class _AddPropertyState extends State<AddProperty> {
                   AddPropTextField(
                     hintText: 'Owner Name',
                     keyboardtype: TextInputType.name,
+                    controller: ownerName,
                   ),
                   AddPropTextField(
                     hintText: 'Owner Number',
                     keyboardtype: TextInputType.number,
+                    controller: ownerNumber,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(12.0),
@@ -93,21 +154,24 @@ class _AddPropertyState extends State<AddProperty> {
                   AddPropTextField(
                     hintText: 'Property Title',
                     keyboardtype: TextInputType.text,
+                    controller: propertyTitle,
                   ),
                   AddPropTextField(
                     hintText: 'Add Price',
                     keyboardtype: TextInputType.number,
+                    controller: price,
                   ),
-                  Padding(
+                  const Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Text(
                       "Choose City",
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 15.0,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
+
                   Padding(
                     padding: const EdgeInsets.only(left: 12.0),
                     child: Wrap(
@@ -130,11 +194,17 @@ class _AddPropertyState extends State<AddProperty> {
                       }),
                     ),
                   ),
+                  AddPropTextField(
+                    hintText: 'Detailed Location',
+                    keyboardtype: TextInputType.text,
+                    controller: detailedLocation,
+                  ),
                   Padding(
                     padding:
                         const EdgeInsets.only(left: 8.0, right: 8.0, top: 14),
                     child: TextFormField(
                       keyboardType: TextInputType.multiline,
+                      controller: propertyDescription,
                       maxLines: 5,
                       decoration: InputDecoration(
                         hintText: 'Enter Property Descripton',
@@ -169,9 +239,9 @@ class _AddPropertyState extends State<AddProperty> {
                           padding: const EdgeInsets.all(8.0),
                           child: locationProvider.selectedLocation != null
                               ? Text('''
-                  Latitude: ${locationProvider.selectedLocation!.latitude}
+                  Latitude: ${locationProvider.selectedLocation!.latitude.toDouble()}
                   
-                   Longitude: ${locationProvider.selectedLocation!.longitude}''')
+                   Longitude: ${locationProvider.selectedLocation!.longitude.toDouble()}''')
                               : Text('Map location will be displayed here'),
                         )
                       ],
@@ -185,7 +255,7 @@ class _AddPropertyState extends State<AddProperty> {
                     onChange: (list) {
                       debugPrint(list.toString());
                     },
-                    controller: controller,
+                    controller: imgcontroller,
                     padding: const EdgeInsets.all(10),
                   ),
                   const SizedBox(height: 32),
@@ -202,8 +272,11 @@ class _AddPropertyState extends State<AddProperty> {
 
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child:
-                        AuthenticationButton(text: 'Submit', onPressed: () {}),
+                    child: AuthenticationButton(
+                        text: 'Submit',
+                        onPressed: () {
+                          onSubmitForm();
+                        }),
                   ),
                 ],
               ),

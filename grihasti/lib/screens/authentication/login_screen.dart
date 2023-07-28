@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:grihasti/provider/user_provider.dart';
 
 import 'package:grihasti/screens/authentication/components/my_button.dart';
 import 'package:grihasti/screens/authentication/components/my_textfield.dart';
@@ -10,34 +11,22 @@ import 'package:grihasti/screens/authentication/forgot_password.dart';
 import 'package:grihasti/screens/authentication/signup_screen.dart';
 import 'package:grihasti/screens/homescreen/homepage.dart';
 import 'package:grihasti/services/auth_service.dart';
+import 'package:provider/provider.dart';
 
-class LoginScreen extends StatefulWidget {
-  @override
-  _LoginScreenState createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  // final _formKey = GlobalKey<FormState>();
-
+class LoginScreen extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
-  void dispose() {
-    super.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-  }
-
-  void loginUser() {
-    FirebaseAuthMethods(FirebaseAuth.instance).loginWithEmail(
+  Widget build(BuildContext context) {
+    void loginUser() {
+      FirebaseAuthMethods(FirebaseAuth.instance).loginWithEmail(
         email: _emailController.text,
         password: _passwordController.text,
-        context: context);
-  }
+        context: context,
+      );
+    }
 
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SafeArea(
