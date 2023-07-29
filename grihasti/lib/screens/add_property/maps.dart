@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:grihasti/screens/add_property/add_property.dart';
+import 'package:grihasti/screens/homescreen/components/custom_appbar.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -16,26 +17,13 @@ class MyMap extends StatelessWidget {
   Widget build(BuildContext context) {
     final locationProvider = Provider.of<LocationProvider>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Select Location'),
-      ),
+      appBar: MyAppBar(title: 'Select Location'),
       body: FlutterMap(
         options: MapOptions(
           center: LatLng(27.700769, 85.300140),
-          zoom: 13.1,
+          zoom: 13.0,
           onTap: (tapPosition, latLng) => locationProvider.handleMapTap(latLng),
         ),
-        nonRotatedChildren: [
-          RichAttributionWidget(
-            attributions: [
-              TextSourceAttribution(
-                'OpenStreetMap contributors',
-                onTap: () =>
-                    launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
-              ),
-            ],
-          ),
-        ],
         children: [
           TileLayer(
             urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -67,6 +55,7 @@ class MyMap extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Color(0xFF1B1A25),
         onPressed: () {
           if (locationProvider.selectedLocation != null) {
             showDialog(

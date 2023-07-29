@@ -1,7 +1,9 @@
+import 'dart:ffi';
+
 class PropertyData {
   final String ownerName;
   final String ownerNumber;
-  // final String city;
+  final String city;
   final String propertyTitle;
   final String price;
   // final String purpose;
@@ -9,12 +11,14 @@ class PropertyData {
   final String propertyDescription;
   final double latitude;
   final double longitude;
+  final String userId;
+
   // final List<String> imageUrls;
 
   PropertyData({
     required this.ownerName,
     required this.ownerNumber,
-    // required this.city,
+    required this.city,
     required this.propertyTitle,
     required this.price,
     // required this.purpose,
@@ -22,6 +26,8 @@ class PropertyData {
     required this.propertyDescription,
     required this.latitude,
     required this.longitude,
+    required this.userId,
+
     // required this.imageUrls,
   });
 }

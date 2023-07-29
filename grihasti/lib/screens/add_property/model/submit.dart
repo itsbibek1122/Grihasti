@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:grihasti/provider/user_provider.dart';
 import 'package:grihasti/screens/add_property/model/property_model.dart';
+import 'package:provider/provider.dart';
 
 class FirebaseService {
   static Future<void> savePropertyData(PropertyData propertyData) async {
@@ -22,6 +25,8 @@ class FirebaseService {
       'propertyDescription': propertyData.propertyDescription,
       'latitude': propertyData.latitude,
       'longitude': propertyData.longitude,
+      'userId': propertyData.userId,
+
       // Add other fields as needed
     });
 

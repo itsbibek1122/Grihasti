@@ -53,11 +53,9 @@ class _AddPropertyState extends State<AddProperty> {
     void onSubmitForm() {
       // Collect the form data and create a PropertyData object
       PropertyData propertyData = PropertyData(
-        // Populate the properties with the form values
-        // (You'll need to adjust this based on your actual form fields)
         ownerName: ownerName.text,
         ownerNumber: ownerNumber.text,
-        // city: selectedCity,
+        city: {chipOptions.selectedCityIndex}.toString(),
         propertyTitle: propertyTitle.text,
         price: price.text,
         // purpose: selectedPurpose,
@@ -65,6 +63,8 @@ class _AddPropertyState extends State<AddProperty> {
         propertyDescription: propertyDescription.text,
         latitude: locationProvider.selectedLocation!.latitude,
         longitude: locationProvider.selectedLocation!.longitude,
+        userId: userId.toString(),
+
         // imageUrls: selectedImageUrls, // List of image URLs selected by the user
       );
 

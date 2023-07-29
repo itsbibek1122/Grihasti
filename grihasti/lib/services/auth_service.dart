@@ -96,12 +96,17 @@ class FirebaseAuthMethods {
     required String password,
     required BuildContext context,
   }) async {
-    String userId = _auth.currentUser!.uid;
+    if (_auth.currentUser != null) {
+      String userId = _auth.currentUser!.uid;
+      // Use the userId variable here.
+      UserProvider userProvider =
+          Provider.of<UserProvider>(context, listen: false);
+      userProvider.setUserId(userId);
+      print('The user id from auth service is :${userId}');
+    } else {
+      showSnackBar(context, 'Login Error');
+    }
     // Store the user ID in the provider
-    UserProvider userProvider =
-        Provider.of<UserProvider>(context, listen: false);
-    userProvider.setUserId(userId);
-    print('The user id from auth service is :${userId}');
 
     try {
       await _auth.signInWithEmailAndPassword(

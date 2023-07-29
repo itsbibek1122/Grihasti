@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grihasti/provider/favourite_provider.dart';
+import 'package:grihasti/screens/details/details_page.dart';
 import 'package:grihasti/screens/homescreen/components/favproduct.dart';
 import 'package:provider/provider.dart';
 
