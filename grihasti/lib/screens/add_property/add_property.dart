@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:grihasti/provider/chip_provider.dart';
@@ -22,27 +21,24 @@ import '../../provider/location_provider.dart';
 import '../homescreen/components/custom_appbar.dart';
 
 class AddProperty extends StatefulWidget {
-  // final LatLng selectedLocation;
-
-  // AddProperty({required this.selectedLocation});
-
   @override
   State<AddProperty> createState() => _AddPropertyState();
 }
 
 class _AddPropertyState extends State<AddProperty> {
-  final imgcontroller = MultiImagePickerController(
-    maxImages: 5,
-    withReadStream: true,
-    allowedImageTypes: ['png', 'jpg', 'jpeg'],
-  );
-
   TextEditingController ownerName = TextEditingController();
   final TextEditingController ownerNumber = TextEditingController();
   final TextEditingController propertyTitle = TextEditingController();
   final TextEditingController price = TextEditingController();
   final TextEditingController detailedLocation = TextEditingController();
   final TextEditingController propertyDescription = TextEditingController();
+  final MultiImagePickerController imagePickerController =
+      MultiImagePickerController(
+    maxImages: 7,
+    allowedImageTypes: ['png', 'jpg', 'jpeg'],
+    withData: false,
+    withReadStream: true,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -61,40 +57,20 @@ class _AddPropertyState extends State<AddProperty> {
         // purpose: selectedPurpose,
         detailedLocation: detailedLocation.text,
         propertyDescription: propertyDescription.text,
-        latitude: locationProvider.selectedLocation!.latitude,
-        longitude: locationProvider.selectedLocation!.longitude,
+        location: GeoPoint(locationProvider.selectedLocation!.latitude,
+            locationProvider.selectedLocation!.longitude),
         userId: userId.toString(),
+        images: imagePickerController.images
+            .map((imageFile) => imageFile.path) // Map ImageFile? to String?
+            .whereType<String>() // Filter out null values
+            .toList(),
 
-        // imageUrls: selectedImageUrls, // List of image URLs selected by the user
+        // List of image URLs selected by the user
       );
 
       // Call the FirebaseService method to save the data
       FirebaseService.savePropertyData(propertyData);
     }
-
-    // void submitFormToFirebase() {
-    //   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-    //   // Generate a unique ID for the property
-    //   String propertyId = _firestore.collection('properties').doc().id;
-
-    //   Map<String, dynamic> formData = {
-    //     'ownerName': ownerName,
-    //     'ownerNumber': ownerNumber,
-    //     // 'city': selectedCity,
-    //     'propertyTitle': propertyTitle,
-    //     'price': price,
-    //     // 'purpose': selectedPurpose,
-    //     'detailedLocation': detailedLocation,
-    //     'propertyDescription': propertyDescription,
-    //     'latitude': (locationProvider.selectedLocation!.latitude),
-    //     'longitude': locationProvider.selectedLocation!.longitude,
-    //     'userId': userId,
-    //   };
-
-    //   // Save the data to Firestore under the 'properties' collection with the generated ID
-    //   _firestore.collection('properties').doc(propertyId).set(formData);
-    // }
 
     return Scaffold(
       appBar: MyAppBar(
@@ -119,11 +95,11 @@ class _AddPropertyState extends State<AddProperty> {
                     keyboardtype: TextInputType.number,
                     controller: ownerNumber,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
+                  const Padding(
+                    padding: EdgeInsets.all(12.0),
                     child: Text(
                       "Purpose",
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 15.0,
                         fontWeight: FontWeight.w500,
                       ),
@@ -162,7 +138,7 @@ class _AddPropertyState extends State<AddProperty> {
                     controller: price,
                   ),
                   const Padding(
-                    padding: const EdgeInsets.all(12.0),
+                    padding: EdgeInsets.all(12.0),
                     child: Text(
                       "Choose City",
                       style: TextStyle(
@@ -255,20 +231,11 @@ class _AddPropertyState extends State<AddProperty> {
                     onChange: (list) {
                       debugPrint(list.toString());
                     },
-                    controller: imgcontroller,
+                    controller: imagePickerController,
                     padding: const EdgeInsets.all(10),
                   ),
+
                   const SizedBox(height: 32),
-//Yo Submit garney code ho IMP DO NOT DELETE
-                  // ElevatedButton(
-                  //   onPressed: () {
-                  //     final images = controller.images;
-                  //     // use these images
-                  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  //         content: Text(images.map((e) => e.name).toString())));
-                  //   },
-                  //   child: null,
-                  // ),
 
                   Padding(
                     padding: const EdgeInsets.all(8.0),

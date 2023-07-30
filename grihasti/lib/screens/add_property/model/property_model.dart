@@ -1,4 +1,6 @@
-import 'dart:ffi';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 
 class PropertyData {
   final String ownerName;
@@ -9,11 +11,9 @@ class PropertyData {
   // final String purpose;
   final String detailedLocation;
   final String propertyDescription;
-  final double latitude;
-  final double longitude;
+  final GeoPoint location;
   final String userId;
-
-  // final List<String> imageUrls;
+  final List<String> images;
 
   PropertyData({
     required this.ownerName,
@@ -21,13 +21,11 @@ class PropertyData {
     required this.city,
     required this.propertyTitle,
     required this.price,
+    required this.location,
     // required this.purpose,
     required this.detailedLocation,
     required this.propertyDescription,
-    required this.latitude,
-    required this.longitude,
     required this.userId,
-
-    // required this.imageUrls,
+    required this.images,
   });
 }
