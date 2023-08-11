@@ -70,11 +70,11 @@ class FirebaseAuthMethods {
     } on FirebaseAuthException catch (e) {
       // if you want to display your own custom error message
       if (e.code == 'weak-password') {
-        showSnackBar(context, 'The password provided is too weak.');
+        mySnackBar(context, 'The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        showSnackBar(context, 'The account already exists for that email.');
+        mySnackBar(context, 'The account already exists for that email.');
       }
-      showSnackBar(context, e.message!);
+      mySnackBar(context, e.message!);
 
       // Displaying the usual firebase error message
     }
@@ -84,9 +84,9 @@ class FirebaseAuthMethods {
   Future<void> sendEmailVerification(BuildContext context) async {
     try {
       _auth.currentUser!.sendEmailVerification();
-      showSnackBar(context, 'Email verification sent!');
+      mySnackBar(context, 'Email verification sent!');
     } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message!.toString()); // Display error message
+      mySnackBar(context, e.message!.toString()); // Display error message
     }
   }
 
@@ -104,7 +104,7 @@ class FirebaseAuthMethods {
       userProvider.setUserId(userId);
       print('The user id from auth service is :${userId}');
     } else {
-      showSnackBar(context, 'Login Error');
+      mySnackBar(context, 'Login Error');
     }
     // Store the user ID in the provider
 
@@ -115,12 +115,12 @@ class FirebaseAuthMethods {
       );
       if (!user.emailVerified) {
         await sendEmailVerification(context);
-        showSnackBar(context, 'Verify email first');
+        mySnackBar(context, 'Verify email first');
       } else {
         Navigator.pushNamed(context, '/home');
       }
     } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message!); // Displaying the error message
+      mySnackBar(context, e.message!); // Displaying the error message
     }
   }
 

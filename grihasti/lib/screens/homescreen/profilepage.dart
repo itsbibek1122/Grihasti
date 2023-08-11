@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:grihasti/screens/add_property/add_prop_textfield.dart';
+import 'package:grihasti/screens/add_property/model/add_prop_textfield.dart';
 import 'package:grihasti/screens/add_property/components/user_repository.dart';
 import 'package:grihasti/screens/authentication/components/my_button.dart';
 import 'package:grihasti/screens/authentication/components/my_textfield.dart';

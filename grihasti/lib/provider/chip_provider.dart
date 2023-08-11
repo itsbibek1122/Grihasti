@@ -6,7 +6,7 @@ class ChipOptions extends ChangeNotifier {
   int _selectedPurposeIndex = 0;
 
   List<String> _cityOptions = ['Kathmandu', 'Bhaktapur', 'Lalitpur'];
-  List<String> _purposeOptions = ['Buy', 'Sell', 'Rent'];
+  List<String> _purposeOptions = ['Sell', 'Rent'];
 
   int get selectedCityIndex => _selectedCityIndex;
   int get selectedPurposeIndex => _selectedPurposeIndex;

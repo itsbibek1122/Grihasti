@@ -8,7 +8,7 @@ class PropertyData {
   final String city;
   final String propertyTitle;
   final String price;
-  // final String purpose;
+  final String purpose;
   final String detailedLocation;
   final String propertyDescription;
   final GeoPoint location;
@@ -22,7 +22,7 @@ class PropertyData {
     required this.propertyTitle,
     required this.price,
     required this.location,
-    // required this.purpose,
+    required this.purpose,
     required this.detailedLocation,
     required this.propertyDescription,
     required this.userId,

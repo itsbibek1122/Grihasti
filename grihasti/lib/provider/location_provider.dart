@@ -6,7 +6,7 @@ class LocationProvider with ChangeNotifier {
 
   LatLng? get selectedLocation => _selectedLocation;
 
-  void handleMapTap(LatLng latLng) {
+  void handleMapTap(LatLng? latLng) {
     _selectedLocation = latLng;
 
     notifyListeners();

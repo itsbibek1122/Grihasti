@@ -7,7 +7,7 @@ import 'package:grihasti/provider/favourite_provider.dart';
 import 'package:grihasti/provider/location_provider.dart';
 
 import 'package:grihasti/provider/user_provider.dart';
-import 'package:grihasti/routes/routes.dart';
+import 'package:grihasti/utils/routes/routes.dart';
 import 'package:grihasti/screens/authentication/login_screen.dart';
 import 'package:grihasti/screens/homescreen/homepage.dart';
 import 'package:grihasti/splashscreen.dart';

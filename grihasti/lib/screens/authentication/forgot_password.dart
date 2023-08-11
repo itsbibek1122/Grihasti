@@ -20,7 +20,7 @@ class ForgotPasswordScreen extends StatelessWidget {
             FirebaseAuth.instance
                 .sendPasswordResetEmail(email: _email.toString());
           } on FirebaseAuthException catch (e) {
-            showSnackBar(context, e.toString());
+            mySnackBar(context, e.toString());
           }
         }
       }

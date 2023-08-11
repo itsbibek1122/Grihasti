@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grihasti/screens/add_property/add_property.dart';
-import 'package:grihasti/screens/add_property/maps.dart';
+import 'package:grihasti/screens/add_property/map_screen.dart';
+import 'package:grihasti/screens/add_property/model/maps.dart';
 import 'package:grihasti/screens/authentication/forgot_password.dart';
 import 'package:grihasti/screens/authentication/login_screen.dart';
 import 'package:grihasti/screens/authentication/signup_screen.dart';
@@ -17,5 +18,5 @@ var routes = <String, WidgetBuilder>{
   '/wishlist': (context) => FavoritesScreen(),
   '/profile': (context) => ProfilePage(),
   '/addProperty': (context) => AddProperty(),
-  '/mapScreen': (context) => MyMap(),
+  '/mapScreen': (context) => MapScreen(),
 };

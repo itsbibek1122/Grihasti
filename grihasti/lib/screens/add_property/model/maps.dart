@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../provider/location_provider.dart';
+import '../../../provider/location_provider.dart';
 
 class MyMap extends StatelessWidget {
   // LatLng _selectedLocation = LatLng(0, 0);
@@ -58,26 +58,6 @@ class MyMap extends StatelessWidget {
         backgroundColor: Color(0xFF1B1A25),
         onPressed: () {
           if (locationProvider.selectedLocation != null) {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text("Location Selected"),
-                  content: Text('''
-                  Latitude: ${locationProvider.selectedLocation!.latitude}
-                  
-                   Longitude: ${locationProvider.selectedLocation!.longitude}'''),
-                  actions: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text("OK"),
-                    ),
-                  ],
-                );
-              },
-            );
             Navigator.pushNamed(context, '/addProperty');
             print(
                 'Latitude is ${locationProvider.selectedLocation!.latitude.toString()}');

@@ -18,17 +18,16 @@ class FirebaseService {
 
       // Store the property data under the 'properties' collection with the generated ID
       await firestore.collection('properties').doc(propertyId).set({
+        'userId': propertyData.userId,
         'ownerName': propertyData.ownerName,
         'ownerNumber': propertyData.ownerNumber,
-        // 'city': propertyData.city,
+        'city': propertyData.city,
         'propertyTitle': propertyData.propertyTitle,
         'price': propertyData.price,
-        // 'purpose': propertyData.purpose,
+        'purpose': propertyData.purpose,
         'location': propertyData.location,
         'detailedLocation': propertyData.detailedLocation,
         'propertyDescription': propertyData.propertyDescription,
-
-        'userId': propertyData.userId,
         'images': propertyData.images,
 
         // Add other fields as needed
