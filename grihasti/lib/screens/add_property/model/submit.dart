@@ -28,20 +28,20 @@ class FirebaseService {
         'location': propertyData.location,
         'detailedLocation': propertyData.detailedLocation,
         'propertyDescription': propertyData.propertyDescription,
-        'images': propertyData.images,
+        'images': [], // This will be updated later
 
         // Add other fields as needed
       });
 
       // Handle image upload separately, assuming you have a list of image URLs in propertyData
-      await uploadPropertyImages(propertyId, propertyData.images);
+      await uploadPropertyImagesAsLinks(propertyId, propertyData.images);
     } catch (e) {
       // Handle errors appropriately
       print("Error saving property data: $e");
     }
   }
 
-  static Future<void> uploadPropertyImages(
+  static Future<void> uploadPropertyImagesAsLinks(
       String propertyId, List<String> imageFilePaths) async {
     try {
       // Get the Firebase Storage instance
@@ -51,7 +51,7 @@ class FirebaseService {
       Reference propertyImageRef =
           storage.ref().child('properties/$propertyId');
 
-      // Upload each image to Firebase Storage
+      // Upload each image to Firebase Storage and get the download URL
       for (int i = 0; i < imageFilePaths.length; i++) {
         String imageName =
             'image_$i.jpg'; // You can customize the image name if needed
@@ -60,7 +60,21 @@ class FirebaseService {
         File imageFile = File(imageFilePath);
         if (imageFile.existsSync()) {
           // Upload the file to Firebase Storage.
-          await propertyImageRef.child(imageName).putFile(imageFile);
+          UploadTask uploadTask =
+              propertyImageRef.child(imageName).putFile(imageFile);
+          await uploadTask
+              .whenComplete(() => print('Image $imageName uploaded'));
+
+          // Get the download URL for the file.
+          String downloadUrl = await uploadTask.snapshot.ref.getDownloadURL();
+
+          // Store the download URL in Firestore.
+          await FirebaseFirestore.instance
+              .collection('properties')
+              .doc(propertyId)
+              .update({
+            'images': [downloadUrl]
+          });
         } else {
           // Create the file.
           // imageFile.createSync();

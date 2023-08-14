@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class PropertyData {
   final String ownerName;
@@ -28,4 +29,33 @@ class PropertyData {
     required this.userId,
     required this.images,
   });
+
+  factory PropertyData.fromJson(Map<String, dynamic> json) {
+    return PropertyData(
+      city: json['city'],
+      propertyTitle: json['propertyTitle'],
+      location: json['location'],
+      ownerName: 'json[ownerName]',
+      ownerNumber: 'json[ownerNumber]',
+      detailedLocation: 'json[detailedLocation]',
+      images: [],
+      price: 'json[price]',
+      propertyDescription: 'json[propertyDescription]',
+      purpose: 'json[purpose]',
+      userId: 'json[userId]',
+    );
+  }
+}
+
+Future<PropertyData> fetchProperty(String propertyId) async {
+  final databaseReference = FirebaseDatabase.instance.ref();
+
+  final propertyData =
+      await databaseReference.child('properties').child(propertyId).get();
+
+  if (propertyData.exists) {
+    return PropertyData.fromJson(propertyData.value as Map<String, dynamic>);
+  } else {
+    throw Exception('Property not found');
+  }
 }

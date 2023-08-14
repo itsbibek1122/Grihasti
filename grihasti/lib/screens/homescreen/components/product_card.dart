@@ -33,12 +33,19 @@ class ProductCard extends StatelessWidget {
               Stack(
                 alignment: Alignment.bottomRight,
                 children: [
-                  Image.asset(
-                    imageUrl,
-                    width: double.infinity,
-                    height: 120,
-                    fit: BoxFit.cover,
-                  ),
+                  imageUrl == null
+                      ? Image.network(
+                          'https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg',
+                          width: double.infinity,
+                          height: 120,
+                          fit: BoxFit.cover,
+                        ) // Show loading indicator if imageUrl is null
+                      : Image.network(
+                          imageUrl,
+                          width: double.infinity,
+                          height: 120,
+                          fit: BoxFit.cover,
+                        ),
                   Container(
                     margin: EdgeInsets.all(10.0),
                     padding: EdgeInsets.all(4.0),
