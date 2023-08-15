@@ -5,6 +5,7 @@ import 'package:grihasti/provider/auth_provider.dart';
 import 'package:grihasti/provider/chip_provider.dart';
 import 'package:grihasti/provider/favourite_provider.dart';
 import 'package:grihasti/provider/location_provider.dart';
+import 'package:grihasti/provider/purpose_filter.dart';
 
 import 'package:grihasti/provider/user_provider.dart';
 import 'package:grihasti/utils/routes/routes.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => FavoritesProvider()),
         ChangeNotifierProvider(create: (context) => ChipOptions()),
         ChangeNotifierProvider(create: (context) => LocationProvider()),
+        ChangeNotifierProvider(create: (context) => PurposeFilterProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

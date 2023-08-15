@@ -8,7 +8,7 @@ import 'package:grihasti/screens/authentication/components/my_textfield.dart';
 import 'package:grihasti/screens/homescreen/components/custom_appbar.dart';
 import 'package:grihasti/screens/homescreen/components/custom_drawer.dart';
 import 'package:grihasti/screens/homescreen/components/editable_textfield.dart';
-import 'package:grihasti/style/colors.dart';
+import 'package:grihasti/utils/style/colors.dart';
 import 'package:grihasti/utils/showSnackBar.dart';
 
 class ProfilePage extends StatefulWidget {

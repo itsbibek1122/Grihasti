@@ -27,7 +27,10 @@ class FirebaseService {
         'location': propertyData.location,
         'detailedLocation': propertyData.detailedLocation,
         'propertyDescription': propertyData.propertyDescription,
-        'images': imageUrls, // Store the image URLs in the Firestore document
+        'images': imageUrls,
+        'premium': 'No',
+        'date':
+            DateTime.now(), // Store the image URLs in the Firestore document
       });
     } catch (e) {
       print("Error saving property data: $e");

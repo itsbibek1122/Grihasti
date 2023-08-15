@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:grihasti/style/colors.dart';
+import 'package:grihasti/utils/style/colors.dart';
 
 class EditableTextField extends StatefulWidget {
   final String initialValue;

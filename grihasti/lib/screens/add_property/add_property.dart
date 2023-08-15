@@ -12,7 +12,7 @@ import 'package:grihasti/screens/add_property/model/submit.dart';
 import 'package:grihasti/screens/authentication/components/my_button.dart';
 
 import 'package:grihasti/screens/homescreen/components/custom_drawer.dart';
-import 'package:grihasti/style/colors.dart';
+import 'package:grihasti/utils/style/colors.dart';
 import 'package:grihasti/utils/showSnackBar.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';

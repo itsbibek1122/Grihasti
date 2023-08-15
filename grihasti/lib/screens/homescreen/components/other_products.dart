@@ -1,24 +1,26 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:grihasti/provider/favourite_provider.dart';
 import 'package:grihasti/screens/details/details_page.dart';
 import 'package:grihasti/screens/homescreen/components/favproduct.dart';
+import 'package:grihasti/utils/style/colors.dart';
 import 'package:provider/provider.dart';
 
 class OtherCard extends StatelessWidget {
-  final FavProduct product;
   final String title;
   final String description;
   final String imageUrl;
-  final String price;
-  bool? isFavorite;
+  final int price;
+  final String purpose;
 
-  OtherCard(
-      {required this.title,
-      required this.description,
-      required this.imageUrl,
-      required this.price,
-      required this.product,
-      this.isFavorite = false});
+  OtherCard({
+    required this.title,
+    required this.description,
+    required this.imageUrl,
+    required this.price,
+    required this.purpose,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class OtherCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        height: 100,
+        height: 120,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8.0),
@@ -52,7 +54,7 @@ class OtherCard extends StatelessWidget {
                   bottomLeft: Radius.circular(8.0),
                 ),
                 image: DecorationImage(
-                  image: AssetImage(imageUrl),
+                  image: NetworkImage(imageUrl),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -90,29 +92,17 @@ class OtherCard extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.amber,
-                  ),
-                  child: IconButton(
-                    icon: Icon(
-                      product.isFavorite
-                          ? Icons.favorite
-                          : Icons.favorite_border,
-                      color: product.isFavorite ? Colors.red : null,
-                    ),
-                    onPressed: () {
-                      if (product.isFavorite) {
-                        favoritesProvider.removeFromFavorites(product);
-                      } else {
-                        favoritesProvider.addToFavorites(product);
-                      }
-                    },
-                  ),
-                )),
+            FittedBox(
+              child: Container(
+                color: AppColors.orangeColor,
+                child: Text(
+                  purpose,
+                  style: const TextStyle(
+                      fontSize: 15,
+                      color: Colors.white), // Adjust the font size as needed
+                ),
+              ),
+            ),
           ],
         ),
       ),

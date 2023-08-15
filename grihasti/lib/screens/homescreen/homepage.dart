@@ -108,15 +108,17 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 15,
                 ),
-                CustomTitle(
-                  maintext: 'Recent Postings',
+                const CustomTitle(
+                  maintext: 'Our Recommendations',
                 ),
                 Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: snapshot.data!.docs.map((doc) {
+                      children: snapshot.data!.docs
+                          .where((doc) => doc['premium'] == 'Yes')
+                          .map((doc) {
                         final imageUrl = doc['images'][0];
                         final storageRef =
                             FirebaseStorage.instance.ref(imageUrl);
@@ -133,34 +135,25 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 8,
                 ),
-                CustomTitle(maintext: 'Other Properties'),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/viewAll');
+                    },
+                    child: const CustomTitle(maintext: 'All Properties')),
                 SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: Column(
-                    children: [
-                      OtherCard(
-                        title: "Kathford College",
-                        description: "Best college",
-                        imageUrl: 'assets/images/house_three.jpg',
-                        price: '14000',
-                        product: FavProduct(
-                          title: 'Kathford College',
-                          imageUrl: 'assets/images/house_three.jpg',
-                          isFavorite: false,
-                        ),
-                      ),
-                      OtherCard(
-                        title: "Hostel",
-                        description: "Best Hostel",
-                        imageUrl: 'assets/images/house_two.jpg',
-                        price: '35000',
-                        product: FavProduct(
-                          title: 'Best Hostel',
-                          imageUrl: 'assets/images/house_two.jpg',
-                          isFavorite: false,
-                        ),
-                      )
-                    ],
+                    children: snapshot.data!.docs.map((doc) {
+                      final imageUrl = doc['images'][0];
+                      final storageRef = FirebaseStorage.instance.ref(imageUrl);
+                      return OtherCard(
+                        title: doc['propertyTitle'],
+                        description: doc['detailedLocation'],
+                        imageUrl: imageUrl,
+                        price: int.parse(doc['price']),
+                        purpose: doc['purpose'],
+                      );
+                    }).toList(),
                   ),
                 )
               ]));

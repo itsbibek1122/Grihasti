@@ -8,6 +8,7 @@ import 'package:grihasti/screens/authentication/signup_screen.dart';
 import 'package:grihasti/screens/favourite/favourite.dart';
 import 'package:grihasti/screens/homescreen/homepage.dart';
 import 'package:grihasti/screens/homescreen/profilepage.dart';
+import 'package:grihasti/screens/homescreen/view_all.dart';
 import 'package:latlong2/latlong.dart';
 
 var routes = <String, WidgetBuilder>{
@@ -19,4 +20,5 @@ var routes = <String, WidgetBuilder>{
   '/profile': (context) => ProfilePage(),
   '/addProperty': (context) => AddProperty(),
   '/mapScreen': (context) => MapScreen(),
+  '/viewAll': (context) => ViewAll(),
 };
