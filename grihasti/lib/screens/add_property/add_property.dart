@@ -220,10 +220,12 @@ class _AddPropertyState extends State<AddProperty> {
                     padding:
                         const EdgeInsets.only(left: 8.0, right: 8.0, top: 14),
                     child: TextFormField(
+                      maxLength: 550,
                       keyboardType: TextInputType.multiline,
                       controller: propertyDescription,
                       maxLines: 5,
                       decoration: InputDecoration(
+                        counterText: '',
                         hintText: 'Enter Property Descripton',
                         enabledBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),

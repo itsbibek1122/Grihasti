@@ -5,6 +5,7 @@ import 'package:grihasti/screens/add_property/model/maps.dart';
 import 'package:grihasti/screens/authentication/forgot_password.dart';
 import 'package:grihasti/screens/authentication/login_screen.dart';
 import 'package:grihasti/screens/authentication/signup_screen.dart';
+import 'package:grihasti/screens/details/details_page.dart';
 import 'package:grihasti/screens/favourite/favourite.dart';
 import 'package:grihasti/screens/homescreen/homepage.dart';
 import 'package:grihasti/screens/homescreen/profilepage.dart';
@@ -21,4 +22,5 @@ var routes = <String, WidgetBuilder>{
   '/addProperty': (context) => AddProperty(),
   '/mapScreen': (context) => MapScreen(),
   '/viewAll': (context) => ViewAll(),
+  '/details': (context) => PropertyDetailsPage(),
 };

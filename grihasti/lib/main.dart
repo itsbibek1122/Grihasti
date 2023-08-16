@@ -8,6 +8,7 @@ import 'package:grihasti/provider/location_provider.dart';
 import 'package:grihasti/provider/purpose_filter.dart';
 
 import 'package:grihasti/provider/user_provider.dart';
+import 'package:grihasti/screens/details/components/carousel_index.dart';
 import 'package:grihasti/utils/routes/routes.dart';
 import 'package:grihasti/screens/authentication/login_screen.dart';
 import 'package:grihasti/screens/homescreen/homepage.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ChipOptions()),
         ChangeNotifierProvider(create: (context) => LocationProvider()),
         ChangeNotifierProvider(create: (context) => PurposeFilterProvider()),
+        ChangeNotifierProvider(create: (context) => ImageIndexProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

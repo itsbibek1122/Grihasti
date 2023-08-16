@@ -75,6 +75,7 @@ class OtherCard extends StatelessWidget {
                     SizedBox(height: 8.0),
                     Text(
                       description,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 14.0,
                         color: Colors.grey,

@@ -108,8 +108,13 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 15,
                 ),
-                const CustomTitle(
-                  maintext: 'Our Recommendations',
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/details');
+                  },
+                  child: const CustomTitle(
+                    maintext: 'Our Recommendations',
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(5.0),

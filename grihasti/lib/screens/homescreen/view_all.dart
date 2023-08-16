@@ -25,14 +25,23 @@ class _ViewAllState extends State<ViewAll> {
     final purposeProvider = Provider.of<PurposeFilterProvider>(context);
     return Scaffold(
       appBar: MyAppBar(title: 'All Properties'),
-      body: Column(children: [
+      body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            'Select City',
+            style: TextStyle(
+              fontSize: 18.0,
+            ),
+          ),
+        ),
         Row(
           children: purposeOptions.map((purpose) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Wrap(spacing: 8.0, children: <Widget>[
                 FilterChip(
-                  shape: StadiumBorder(side: BorderSide()),
+                  shape: const StadiumBorder(side: BorderSide()),
                   elevation: 1,
                   backgroundColor: AppColors.blackColor,
                   selectedColor: AppColors.orangeColor,
