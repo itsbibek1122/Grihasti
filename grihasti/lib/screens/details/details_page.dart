@@ -26,11 +26,6 @@ class PropertyDetailsPage extends StatefulWidget {
 class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
   final CollectionReference propertiesCollection =
       FirebaseFirestore.instance.collection('properties');
-  final List<String> imgList = [
-    'assets/images/house_one.jpg',
-    'assets/images/house_two.jpg',
-    'assets/images/house_three.jpg',
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +34,12 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     final imageIndexProvider = Provider.of<ImageIndexProvider>(context);
+
+    // final List<String> imgList = [
+    //   'assets/images/house_one.jpg',
+    //   'assets/images/house_two.jpg',
+    //   'assets/images/house_three.jpg',
+    // ];
 
     return Scaffold(
       appBar: MyAppBar(title: 'Property Details'),
@@ -76,6 +77,7 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
           final ownerName = propertyData['ownerName'] ?? 'Default';
           final ownerNumber = propertyData['ownerNumber'] ?? 'Default';
           final map = propertyData['location'] ?? 'Default';
+          List<dynamic> images = snapshot.data!['images'];
 
           return Stack(
             children: [
@@ -89,10 +91,10 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
                         imageIndexProvider.updateIndex(index);
                       },
                     ),
-                    items: imgList.map((item) {
+                    items: images.map((item) {
                       return Container(
                         child: Center(
-                          child: Image.asset(
+                          child: Image.network(
                             item,
                             fit: BoxFit.cover,
                             width: width * 0.75,
@@ -104,8 +106,8 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: imgList.map((url) {
-                      int index = imgList.indexOf(url);
+                    children: images.map((url) {
+                      int index = images.indexOf(url);
                       return Container(
                         width: 8.0,
                         height: 8.0,
@@ -291,7 +293,12 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
                         ),
                       ],
                     ),
-                  )
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(25.0, 15.0, 0, 0),
+                    child: AuthenticationButton(text: 'Book', onPressed: () {}),
+                  ),
                 ],
               ),
               GestureDetector(
