@@ -22,5 +22,6 @@ var routes = <String, WidgetBuilder>{
   '/addProperty': (context) => AddProperty(),
   '/mapScreen': (context) => MapScreen(),
   '/viewAll': (context) => ViewAll(),
-  '/details': (context) => PropertyDetailsPage(),
+  '/details': (context) =>
+      PropertyDetailsPage(ModalRoute.of(context)!.settings.arguments as String),
 };

@@ -5,15 +5,27 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:grihasti/screens/authentication/components/my_button.dart';
 import 'package:grihasti/screens/details/components/carousel_index.dart';
 import 'package:grihasti/screens/details/components/custom_indicator.dart';
+
 import 'package:grihasti/screens/homescreen/components/custom_appbar.dart';
 import 'package:grihasti/screens/homescreen/components/custom_drawer.dart';
 import 'package:grihasti/screens/homescreen/components/other_products.dart';
+import 'package:grihasti/utils/showSnackBar.dart';
 import 'package:grihasti/utils/style/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
-class PropertyDetailsPage extends StatelessWidget {
+class PropertyDetailsPage extends StatefulWidget {
+  final String documentId;
+  PropertyDetailsPage(this.documentId);
+
+  @override
+  State<PropertyDetailsPage> createState() => _PropertyDetailsPageState();
+}
+
+class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
+  final CollectionReference propertiesCollection =
+      FirebaseFirestore.instance.collection('properties');
   final List<String> imgList = [
     'assets/images/house_one.jpg',
     'assets/images/house_two.jpg',
@@ -22,8 +34,8 @@ class PropertyDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CollectionReference propertiesCollection =
-        FirebaseFirestore.instance.collection('properties');
+    final documentId = ModalRoute.of(context)!.settings.arguments as String;
+
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     final imageIndexProvider = Provider.of<ImageIndexProvider>(context);
@@ -31,18 +43,46 @@ class PropertyDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: MyAppBar(title: 'Property Details'),
       drawer: CustomDrawer(),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: propertiesCollection.snapshots(),
+      body: FutureBuilder<DocumentSnapshot>(
+        future: FirebaseFirestore.instance
+            .collection('properties')
+            .doc(documentId)
+            .get(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
+          if (!snapshot.hasData || snapshot.data == null) {
+            return Text(
+                'Document not found'); // Handle if document doesn't exist
+          }
+          final propertyData = snapshot.data!.data() as Map<String, dynamic>?;
+
+          if (propertyData == null) {
+            return Text('Data not available'); // Handle if data is null
+          }
+
+          final propertyTitle = propertyData['propertyTitle'] ?? 'Default';
+          final detailedLocation =
+              propertyData['detailedLocation'] ?? 'Default';
+          final price = propertyData['price'] ?? 'Default';
+          final city = propertyData['city'] ?? 'Default';
+          final propertyDescription =
+              propertyData['propertyDescription'] ?? 'Default';
+          final purpose = propertyData['purpose'] ?? 'Default';
+          final ownerName = propertyData['ownerName'] ?? 'Default';
+          final ownerNumber = propertyData['ownerNumber'] ?? 'Default';
+          final map = propertyData['location'] ?? 'Default';
 
           return Stack(
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Text('Document ID: $documentId'),
                   CarouselSlider(
                     options: CarouselOptions(
                       onPageChanged: (index, reason) {
@@ -83,9 +123,17 @@ class PropertyDetailsPage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'Rent',
+                      '$propertyTitle',
                       style: TextStyle(
-                          fontSize: width * 0.05, fontWeight: FontWeight.w400),
+                          fontSize: width * 0.06, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Text(
+                      'Purpose : $purpose',
+                      style: TextStyle(
+                          fontSize: width * 0.04, fontWeight: FontWeight.w300),
                     ),
                   ),
                   Padding(
@@ -94,9 +142,9 @@ class PropertyDetailsPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Npr. 55,000',
+                          'Npr. $price',
                           style: TextStyle(
-                              fontSize: width * 0.08,
+                              fontSize: width * 0.07,
                               fontWeight: FontWeight.w600),
                         ),
                         Padding(
@@ -105,9 +153,9 @@ class PropertyDetailsPage extends StatelessWidget {
                             decoration: BoxDecoration(border: Border.all()),
                             child: IconButton(
                                 onPressed: () => MapsLauncher.launchCoordinates(
-                                    37.4220041,
-                                    -122.0862462,
-                                    'Google Headquarters are here'),
+                                    map.latitude,
+                                    map.longitude,
+                                    '$propertyTitle'),
                                 icon: const Icon(
                                   Icons.directions,
                                 )),
@@ -128,7 +176,7 @@ class PropertyDetailsPage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'Near Main Road, Lalitpur',
+                      '$detailedLocation, $city',
                       style: TextStyle(
                           fontSize: width * 0.04,
                           fontWeight: FontWeight.w500,
@@ -162,8 +210,7 @@ class PropertyDetailsPage extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                    child: Text('$propertyDescription',
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 15,
@@ -179,11 +226,14 @@ class PropertyDetailsPage extends StatelessWidget {
                           width: MediaQuery.of(context).size.width / 2.4,
                           child: ElevatedButton(
                             onPressed: () async {
-                              Uri phoneno = Uri.parse('tel:+97798345348734');
+                              // Create a Uri object with the phone number.
+                              Uri phoneno = Uri.parse('tel:$ownerNumber');
+
+                              // Try to launch the dialer with the phone number.
                               if (await launchUrl(phoneno)) {
-                                //dialer opened
+                                CircularProgressIndicator();
                               } else {
-                                //dailer is not opened
+                                mySnackBar(context, 'Dailer Error');
                               }
                             },
                             style: ElevatedButton.styleFrom(
@@ -192,18 +242,21 @@ class PropertyDetailsPage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-                            child: Row(
-                              children: [
-                                Icon(Icons.call),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'Owner Name',
-                                    style: const TextStyle(
-                                        fontSize: 15, color: Colors.white),
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Row(
+                                children: [
+                                  Icon(Icons.call),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      '$ownerName',
+                                      style: const TextStyle(
+                                          fontSize: 15, color: Colors.white),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -218,18 +271,21 @@ class PropertyDetailsPage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-                            child: Row(
-                              children: [
-                                Icon(Icons.chat_rounded),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'Owner Name',
-                                    style: const TextStyle(
-                                        fontSize: 15, color: Colors.white),
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Row(
+                                children: [
+                                  Icon(Icons.chat_rounded),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      '$ownerName',
+                                      style: const TextStyle(
+                                          fontSize: 15, color: Colors.white),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -273,20 +329,46 @@ class PropertyDetailsPage extends StatelessWidget {
                                   endIndent: 0,
                                   color: Colors.grey,
                                 ),
-                                Column(
-                                  children: snapshot.data!.docs.map((doc) {
-                                    final imageUrl = doc['images'][0];
-                                    final storageRef =
-                                        FirebaseStorage.instance.ref(imageUrl);
+                                StreamBuilder<QuerySnapshot>(
+                                  stream: propertiesCollection.snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                          child: CircularProgressIndicator());
+                                    }
 
-                                    return OtherCard(
-                                      title: doc['propertyTitle'],
-                                      description: doc['detailedLocation'],
-                                      imageUrl: imageUrl,
-                                      price: int.parse(doc['price']),
-                                      purpose: doc['purpose'],
+                                    return SingleChildScrollView(
+                                      scrollDirection: Axis.vertical,
+                                      child: Column(
+                                        children: snapshot.data!.docs
+                                            .where((doc) =>
+                                                doc['purpose'] == purpose)
+                                            .map((doc) {
+                                          final documentId =
+                                              doc.id; // Get the document ID
+                                          final imageUrl = doc['images'][0];
+                                          final storageRef = FirebaseStorage
+                                              .instance
+                                              .ref(imageUrl);
+                                          return GestureDetector(
+                                            onTap: () {
+                                              Navigator.pushNamed(
+                                                  context, '/details',
+                                                  arguments: documentId);
+                                            },
+                                            child: OtherCard(
+                                              title: doc['propertyTitle'],
+                                              description:
+                                                  doc['detailedLocation'],
+                                              imageUrl: imageUrl,
+                                              price: int.parse(doc['price']),
+                                              purpose: doc['purpose'],
+                                            ),
+                                          );
+                                        }).toList(),
+                                      ),
                                     );
-                                  }).toList(),
+                                  },
                                 ),
                               ],
                             ),
