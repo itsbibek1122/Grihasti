@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:grihasti/firebase_options.dart';
 import 'package:grihasti/provider/auth_provider.dart';
 import 'package:grihasti/provider/chip_provider.dart';
+import 'package:grihasti/provider/dropdown_provider.dart';
 import 'package:grihasti/provider/favourite_provider.dart';
 import 'package:grihasti/provider/location_provider.dart';
 import 'package:grihasti/provider/purpose_filter.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => LocationProvider()),
         ChangeNotifierProvider(create: (context) => PurposeFilterProvider()),
         ChangeNotifierProvider(create: (context) => ImageIndexProvider()),
+        ChangeNotifierProvider(create: (context) => DropdownProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

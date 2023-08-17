@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:grihasti/provider/chip_provider.dart';
+import 'package:grihasti/provider/dropdown_provider.dart';
 import 'package:grihasti/provider/user_provider.dart';
 import 'package:grihasti/screens/add_property/model/add_prop_textfield.dart';
 import 'package:grihasti/screens/add_property/components/user_repository.dart';
@@ -49,6 +50,13 @@ class _AddPropertyState extends State<AddProperty> {
       context,
     );
     final userId = Provider.of<UserProvider>(context).userId;
+    final dropdownProvider = Provider.of<DropdownProvider>(context);
+
+    List<String> bedrooms = ["1", "2", "3", "4", "5"];
+    List<String> bathrooms = ["1", "2", "3", "4"];
+    List<String> kitchens = ["1", "2", "3"];
+    List<String> carParking = ["Yes", "No"];
+    List<String> bikeParking = ["Yes", "No"];
 
     bool _validateForm() {
       if (ownerName.text.isEmpty ||
@@ -59,7 +67,12 @@ class _AddPropertyState extends State<AddProperty> {
           propertyDescription.text.isEmpty ||
           locationProvider.selectedLocation == null ||
           chipOptions.selectedCityIndex == -1 ||
-          chipOptions.selectedPurposeIndex == -1) {
+          chipOptions.selectedPurposeIndex == -1 ||
+          dropdownProvider.selectedBathrooms.isEmpty ||
+          dropdownProvider.selectedBedrooms.isEmpty ||
+          dropdownProvider.selectedKitchen.isEmpty ||
+          dropdownProvider.selectedCarParking.isEmpty ||
+          dropdownProvider.selectedBikeParking.isEmpty) {
         mySnackBar(context, 'Please fill in all fields');
         return false;
       }
@@ -85,6 +98,11 @@ class _AddPropertyState extends State<AddProperty> {
               .map((imageFile) => imageFile.path) // Map ImageFile? to String?
               .whereType<String>() // Filter out null values
               .toList(),
+          bedroom: dropdownProvider.selectedBedrooms.toString(),
+          bathroom: dropdownProvider.selectedBathrooms.toString(),
+          kitchen: dropdownProvider.selectedKitchen.toString(),
+          carparking: dropdownProvider.selectedCarParking.toString(),
+          bikeparking: dropdownProvider.selectedBikeParking.toString(),
 
           // List of image URLs selected by the user
         );
@@ -105,7 +123,14 @@ class _AddPropertyState extends State<AddProperty> {
         locationProvider.handleMapTap(null); // Clear the selected location
         chipOptions.setSelectedCityIndex(-1); // Reset city selection
         chipOptions.setSelectedPurposeIndex(-1); // Reset purpose selection
-        imagePickerController.clearImages(); // Clear selected images
+        imagePickerController.clearImages();
+        dropdownProvider.clearSelectedBedrooms();
+        dropdownProvider.clearSelectedBathrooms();
+        dropdownProvider.clearSelectedKitchen();
+        dropdownProvider.clearSelectedCarParking();
+        dropdownProvider.clearSelectedBikeParking();
+
+        // Clear selected images
       }
     }
 
@@ -186,7 +211,6 @@ class _AddPropertyState extends State<AddProperty> {
                       ),
                     ),
                   ),
-
                   Padding(
                     padding: const EdgeInsets.only(left: 12.0),
                     child: Wrap(
@@ -216,6 +240,98 @@ class _AddPropertyState extends State<AddProperty> {
                     keyboardtype: TextInputType.text,
                     controller: detailedLocation,
                   ),
+                  Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Consumer<DropdownProvider>(
+                          builder: (context, dropdownProvider, _) {
+                        return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(9.0),
+                                child: Text(
+                                  "Property Details",
+                                  style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  Column(
+                                    children: [
+                                      const Text('Bedroom'),
+                                      buildDropdown(
+                                        dropdownProvider.selectedBedrooms,
+                                        (String? newValue) {
+                                          dropdownProvider
+                                              .setSelectedBedrooms(newValue);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      const Text('Bathroom'),
+                                      buildDropdown(
+                                        dropdownProvider.selectedBathrooms,
+                                        (String? newValue) {
+                                          dropdownProvider
+                                              .setSelectedBathrooms(newValue);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      const Text('Kitchen'),
+                                      buildDropdown(
+                                        dropdownProvider.selectedKitchen,
+                                        (String? newValue) {
+                                          dropdownProvider
+                                              .setSelectedKitchen(newValue);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ]);
+                      })),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          const Text('Car Parking'),
+                          buildDropdown(
+                            dropdownProvider.selectedCarParking,
+                            (String? newValue) {
+                              dropdownProvider.setSelectedCarParking(newValue);
+                            },
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          const Text('Bike Parking'),
+                          buildDropdown(
+                            dropdownProvider.selectedBikeParking,
+                            (String? newValue) {
+                              dropdownProvider.setSelectedBikeParking(newValue);
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+
                   Padding(
                     padding:
                         const EdgeInsets.only(left: 8.0, right: 8.0, top: 14),
@@ -300,4 +416,20 @@ class _AddPropertyState extends State<AddProperty> {
       ),
     );
   }
+}
+
+DropdownButton<String> buildDropdown(
+    String value, void Function(String?) onChanged) {
+  List<String> options = ['0', '1', '2', '3', '4', '5'];
+
+  return DropdownButton<String>(
+    value: value,
+    onChanged: onChanged,
+    items: options.map<DropdownMenuItem<String>>((String option) {
+      return DropdownMenuItem<String>(
+        value: option,
+        child: Text(option),
+      );
+    }).toList(),
+  );
 }

@@ -27,6 +27,11 @@ class FirebaseService {
         'location': propertyData.location,
         'detailedLocation': propertyData.detailedLocation,
         'propertyDescription': propertyData.propertyDescription,
+        'bedroom': propertyData.bedroom,
+        'bathroom': propertyData.bathroom,
+        'kitchen': propertyData.kitchen,
+        'carparking': propertyData.carparking,
+        'bikeparking': propertyData.bikeparking,
         'images': imageUrls,
         'premium': 'No',
         'date':

@@ -15,6 +15,11 @@ class PropertyData {
   final GeoPoint location;
   final String userId;
   final List<String> images;
+  final String bedroom;
+  final String bathroom;
+  final String kitchen;
+  final String carparking;
+  final String bikeparking;
 
   PropertyData({
     required this.ownerName,
@@ -26,24 +31,33 @@ class PropertyData {
     required this.purpose,
     required this.detailedLocation,
     required this.propertyDescription,
+    required this.bedroom,
+    required this.bathroom,
+    required this.kitchen,
+    required this.carparking,
+    required this.bikeparking,
     required this.userId,
     required this.images,
   });
 
   factory PropertyData.fromJson(Map<String, dynamic> json) {
     return PropertyData(
-      city: json['city'],
-      propertyTitle: json['propertyTitle'],
-      location: json['location'],
-      ownerName: 'json[ownerName]',
-      ownerNumber: 'json[ownerNumber]',
-      detailedLocation: 'json[detailedLocation]',
-      images: [],
-      price: 'json[price]',
-      propertyDescription: 'json[propertyDescription]',
-      purpose: 'json[purpose]',
-      userId: 'json[userId]',
-    );
+        city: json['city'],
+        propertyTitle: json['propertyTitle'],
+        location: json['location'],
+        ownerName: 'json[ownerName]',
+        ownerNumber: 'json[ownerNumber]',
+        detailedLocation: 'json[detailedLocation]',
+        images: [],
+        price: 'json[price]',
+        propertyDescription: 'json[propertyDescription]',
+        purpose: 'json[purpose]',
+        userId: 'json[userId]',
+        bedroom: 'json[bedroom]',
+        bathroom: 'json[bathroom]',
+        kitchen: 'json[kitchen]',
+        carparking: 'json[carparking]',
+        bikeparking: 'json[bikeparking]');
   }
 }
 

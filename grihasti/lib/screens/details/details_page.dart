@@ -77,6 +77,11 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
           final ownerName = propertyData['ownerName'] ?? 'Default';
           final ownerNumber = propertyData['ownerNumber'] ?? 'Default';
           final map = propertyData['location'] ?? 'Default';
+          final bedroom = propertyData['bedroom'];
+          final bathroom = propertyData['bathroom'];
+          final kitchen = propertyData['kitchen'];
+          final carparking = propertyData['carparking'];
+          final bikeparking = propertyData['bikeparking'];
           List<dynamic> images = snapshot.data!['images'];
 
           return Stack(
@@ -191,15 +196,20 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         CustomIndicator(
-                            iconData: Icons.bedroom_parent_rounded, value: 2),
+                            iconData: Icons.bedroom_parent_rounded,
+                            value: int.parse(bedroom)),
                         CustomIndicator(
-                            iconData: Icons.bathtub_rounded, value: 3),
+                            iconData: Icons.bathtub_rounded,
+                            value: int.parse(bathroom)),
                         CustomIndicator(
-                            iconData: Icons.dining_rounded, value: 2),
+                            iconData: Icons.dining_rounded,
+                            value: int.parse(kitchen)),
                         CustomIndicator(
-                            iconData: Icons.car_repair_rounded, value: 1),
+                            iconData: Icons.car_repair_rounded,
+                            value: int.parse(carparking)),
                         CustomIndicator(
-                            iconData: Icons.motorcycle_rounded, value: 5)
+                            iconData: Icons.motorcycle_rounded,
+                            value: int.parse(bikeparking))
                       ],
                     ),
                   ),
