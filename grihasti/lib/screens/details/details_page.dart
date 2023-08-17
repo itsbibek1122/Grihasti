@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_datetime_picker_bdaya/flutter_datetime_picker_bdaya.dart';
+import 'package:grihasti/provider/date_time_provider.dart';
 import 'package:grihasti/screens/authentication/components/my_button.dart';
 import 'package:grihasti/screens/details/components/carousel_index.dart';
 import 'package:grihasti/screens/details/components/custom_indicator.dart';
@@ -11,6 +13,7 @@ import 'package:grihasti/screens/homescreen/components/custom_drawer.dart';
 import 'package:grihasti/screens/homescreen/components/other_products.dart';
 import 'package:grihasti/utils/showSnackBar.dart';
 import 'package:grihasti/utils/style/colors.dart';
+
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:maps_launcher/maps_launcher.dart';
@@ -34,12 +37,21 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     final imageIndexProvider = Provider.of<ImageIndexProvider>(context);
+    final datePickerState = Provider.of<DatePickerState>(context);
 
-    // final List<String> imgList = [
-    //   'assets/images/house_one.jpg',
-    //   'assets/images/house_two.jpg',
-    //   'assets/images/house_three.jpg',
-    // ];
+    void handleButtonPress() {
+      if (!datePickerState.isDateSelected) {
+        DatePickerBdaya.showDateTimePicker(
+          context,
+          showTitleActions: true,
+          onConfirm: (date) {
+            datePickerState.setSelectedDate(date);
+            debugPrint('confirm $date');
+          },
+          currentTime: DateTime(2023, 08, 17, 02, 01, 34),
+        );
+      }
+    }
 
     return Scaffold(
       appBar: MyAppBar(title: 'Property Details'),
@@ -307,7 +319,24 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
 
                   Padding(
                     padding: const EdgeInsets.fromLTRB(25.0, 15.0, 0, 0),
-                    child: AuthenticationButton(text: 'Book', onPressed: () {}),
+                    child: Column(
+                      children: [
+                        AuthenticationButton(
+                          text: datePickerState.isDateSelected
+                              ? 'Already Booked'
+                              : 'Book',
+                          onPressed: handleButtonPress,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            datePickerState.isDateSelected
+                                ? 'Booked Date: ${datePickerState.selectedDate.toString()}'
+                                : 'No date selected',
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),
