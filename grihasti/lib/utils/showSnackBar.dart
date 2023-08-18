@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 void mySnackBar(BuildContext context, String text) {
@@ -12,9 +13,10 @@ void mySnackBar(BuildContext context, String text) {
           color: Colors.red,
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
-        child: Text(
+        child: AutoSizeText(
           text,
-          style: const TextStyle(overflow: TextOverflow.ellipsis),
+          style: TextStyle(fontSize: 15),
+          maxLines: 3,
         ),
       ),
     ),

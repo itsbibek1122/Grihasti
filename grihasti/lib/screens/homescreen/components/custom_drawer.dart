@@ -39,7 +39,7 @@ class CustomDrawer extends StatelessWidget {
               style: TextStyle(color: Colors.white),
             ),
             onTap: () {
-              // Handle the onTap event for this item
+              Navigator.pushNamed(context, '/mapsView');
             },
           ),
           ListTile(

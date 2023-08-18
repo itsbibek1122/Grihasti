@@ -26,6 +26,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final CollectionReference propertiesCollection =
       FirebaseFirestore.instance.collection('properties');
+
+  final User? user = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -59,8 +62,7 @@ class _HomePageState extends State<HomePage> {
                               style: TextStyle(color: Colors.white),
                             ),
                             Text(
-                              (FirebaseAuth.instance.currentUser!.email)
-                                  .toString(),
+                              ('${user!.email ?? "N/A"}'),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 24.0,

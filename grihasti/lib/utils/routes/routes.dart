@@ -10,6 +10,7 @@ import 'package:grihasti/screens/favourite/favourite.dart';
 import 'package:grihasti/screens/homescreen/homepage.dart';
 import 'package:grihasti/screens/homescreen/profilepage.dart';
 import 'package:grihasti/screens/homescreen/view_all.dart';
+import 'package:grihasti/screens/maps_view/maps_view.dart';
 import 'package:latlong2/latlong.dart';
 
 var routes = <String, WidgetBuilder>{
@@ -22,6 +23,8 @@ var routes = <String, WidgetBuilder>{
   '/addProperty': (context) => AddProperty(),
   '/mapScreen': (context) => MapScreen(),
   '/viewAll': (context) => ViewAll(),
-  '/details': (context) =>
-      PropertyDetailsPage(ModalRoute.of(context)!.settings.arguments as String),
+  '/mapsView': (context) => MapsView(),
+  '/details': (context) => PropertyDetailsPage(
+        ModalRoute.of(context)!.settings.arguments as String,
+      ),
 };

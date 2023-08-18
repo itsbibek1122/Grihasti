@@ -11,8 +11,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../../provider/location_provider.dart';
 
 class MyMap extends StatelessWidget {
-  // LatLng _selectedLocation = LatLng(0, 0);
-
   @override
   Widget build(BuildContext context) {
     final locationProvider = Provider.of<LocationProvider>(context);

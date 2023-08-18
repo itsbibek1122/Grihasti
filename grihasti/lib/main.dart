@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:grihasti/firebase_options.dart';
 import 'package:grihasti/provider/auth_provider.dart';
 import 'package:grihasti/provider/chip_provider.dart';
-import 'package:grihasti/provider/date_time_provider.dart';
+import 'package:grihasti/provider/current_location_provider.dart';
+
 import 'package:grihasti/provider/dropdown_provider.dart';
 import 'package:grihasti/provider/favourite_provider.dart';
 import 'package:grihasti/provider/location_provider.dart';
@@ -22,6 +23,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(const MyApp());
 }
 
@@ -39,7 +41,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => PurposeFilterProvider()),
         ChangeNotifierProvider(create: (context) => ImageIndexProvider()),
         ChangeNotifierProvider(create: (context) => DropdownProvider()),
-        ChangeNotifierProvider(create: (context) => DatePickerState()),
+        ChangeNotifierProvider(create: (context) => CurrentLocationProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

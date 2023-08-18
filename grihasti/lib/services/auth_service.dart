@@ -104,7 +104,7 @@ class FirebaseAuthMethods {
       userProvider.setUserId(userId);
       print('The user id from auth service is :${userId}');
     } else {
-      mySnackBar(context, 'Login Error');
+      print('Login Error');
     }
     // Store the user ID in the provider
 

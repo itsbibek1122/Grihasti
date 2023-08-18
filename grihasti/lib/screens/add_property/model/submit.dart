@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:grihasti/provider/user_provider.dart';
@@ -34,8 +35,9 @@ class FirebaseService {
         'bikeparking': propertyData.bikeparking,
         'images': imageUrls,
         'premium': 'No',
-        'date':
-            DateTime.now(), // Store the image URLs in the Firestore document
+        'date': DateTime.now(),
+        'bookedBy': null,
+        // Store the image URLs in the Firestore document
       });
     } catch (e) {
       print("Error saving property data: $e");

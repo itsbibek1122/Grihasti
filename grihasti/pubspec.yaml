@@ -50,6 +50,9 @@ dependencies:
   carousel_slider: ^4.2.1
   maps_launcher: ^2.2.0
   flutter_datetime_picker_bdaya: ^3.0.2
+  geolocator: ^10.0.0
+  auto_size_text: ^3.0.0
+  permission_handler: ^10.4.3
 
 dev_dependencies:
   flutter_test:

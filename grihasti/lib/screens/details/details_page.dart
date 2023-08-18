@@ -3,7 +3,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_datetime_picker_bdaya/flutter_datetime_picker_bdaya.dart';
-import 'package:grihasti/provider/date_time_provider.dart';
+
+import 'package:grihasti/provider/user_provider.dart';
+import 'package:grihasti/screens/add_property/model/submit.dart';
 import 'package:grihasti/screens/authentication/components/my_button.dart';
 import 'package:grihasti/screens/details/components/carousel_index.dart';
 import 'package:grihasti/screens/details/components/custom_indicator.dart';
@@ -30,6 +32,9 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
   final CollectionReference propertiesCollection =
       FirebaseFirestore.instance.collection('properties');
 
+  bool isBooked = false;
+  bool isBookingInProgress = false;
+
   @override
   Widget build(BuildContext context) {
     final documentId = ModalRoute.of(context)!.settings.arguments as String;
@@ -37,21 +42,8 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     final imageIndexProvider = Provider.of<ImageIndexProvider>(context);
-    final datePickerState = Provider.of<DatePickerState>(context);
 
-    void handleButtonPress() {
-      if (!datePickerState.isDateSelected) {
-        DatePickerBdaya.showDateTimePicker(
-          context,
-          showTitleActions: true,
-          onConfirm: (date) {
-            datePickerState.setSelectedDate(date);
-            debugPrint('confirm $date');
-          },
-          currentTime: DateTime(2023, 08, 17, 02, 01, 34),
-        );
-      }
-    }
+    final userId = Provider.of<UserProvider>(context).userId;
 
     return Scaffold(
       appBar: MyAppBar(title: 'Property Details'),
@@ -321,20 +313,7 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
                     padding: const EdgeInsets.fromLTRB(25.0, 15.0, 0, 0),
                     child: Column(
                       children: [
-                        AuthenticationButton(
-                          text: datePickerState.isDateSelected
-                              ? 'Already Booked'
-                              : 'Book',
-                          onPressed: handleButtonPress,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            datePickerState.isDateSelected
-                                ? 'Booked Date: ${datePickerState.selectedDate.toString()}'
-                                : 'No date selected',
-                          ),
-                        )
+                        AuthenticationButton(text: 'Book', onPressed: () {}),
                       ],
                     ),
                   ),
