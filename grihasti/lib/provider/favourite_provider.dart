@@ -1,19 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:grihasti/screens/homescreen/components/favproduct.dart';
+import 'package:flutter/foundation.dart';
 
-class FavoritesProvider extends ChangeNotifier {
-  List<FavProduct> _favorites = [];
+class PropertyFavoriteProvider with ChangeNotifier {
+  Map<String, bool> _propertySavedStatus = {};
 
-  List<FavProduct> get favorites => _favorites;
-
-  void addToFavorites(FavProduct product) {
-    _favorites.add(product);
-    SnackBar(content: Text('Added to fav'));
-    notifyListeners();
+  // Get the saved status for a specific property by its ID.
+  bool getPropertySavedStatus(String propertyId) {
+    return _propertySavedStatus[propertyId] ?? false;
   }
 
-  void removeFromFavorites(FavProduct product) {
-    _favorites.remove(product);
+  // Toggle the saved status for a specific property by its ID.
+  void togglePropertySaved(String propertyId) {
+    if (_propertySavedStatus.containsKey(propertyId)) {
+      _propertySavedStatus[propertyId] = !_propertySavedStatus[propertyId]!;
+    } else {
+      _propertySavedStatus[propertyId] = true;
+    }
     notifyListeners();
   }
 }

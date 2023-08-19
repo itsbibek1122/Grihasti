@@ -3,6 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_datetime_picker_bdaya/flutter_datetime_picker_bdaya.dart';
+import 'package:grihasti/provider/favourite_provider.dart';
 
 import 'package:grihasti/provider/user_provider.dart';
 import 'package:grihasti/screens/add_property/model/submit.dart';
@@ -32,8 +33,7 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
   final CollectionReference propertiesCollection =
       FirebaseFirestore.instance.collection('properties');
 
-  bool isBooked = false;
-  bool isBookingInProgress = false;
+  bool isPropertySaved = false;
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +42,47 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     final imageIndexProvider = Provider.of<ImageIndexProvider>(context);
+    final propertyFavoriteProvider =
+        Provider.of<PropertyFavoriteProvider>(context);
 
     final userId = Provider.of<UserProvider>(context).userId;
+
+    Future<void> togglePropertySaved() async {
+      // Get the property data from the database.
+      final propertyData = await FirebaseFirestore.instance
+          .collection('properties')
+          .doc(documentId)
+          .get();
+
+      // Check if the property is already saved by the user.
+      final savedPropertyQuery = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('savedProperties')
+          .where('propertyId', isEqualTo: documentId)
+          .get();
+
+      bool isSaved = savedPropertyQuery.docs.isNotEmpty;
+
+      if (isSaved) {
+        // Property is already saved, so remove it from the user's saved properties.
+        await savedPropertyQuery.docs.first.reference.delete();
+      } else {
+        // Property is not saved, so add it to the user's saved properties.
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .collection('savedProperties')
+            .add({
+          'propertyId': propertyData.id,
+          'propertyTitle': propertyData['propertyTitle'],
+          'detailedLocation': propertyData['detailedLocation'],
+          'imageUrl': propertyData['images'][0],
+          'price': propertyData['price'],
+          'purpose': propertyData['purpose'],
+        });
+      }
+    }
 
     return Scaffold(
       appBar: MyAppBar(title: 'Property Details'),
@@ -175,11 +214,18 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
                         Container(
                           decoration: BoxDecoration(border: Border.all()),
                           child: IconButton(
-                              style: ButtonStyle(),
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.favorite_border_outlined,
-                              )),
+                            onPressed: () {
+                              togglePropertySaved();
+                              propertyFavoriteProvider
+                                  .togglePropertySaved(documentId);
+                            },
+                            icon: Icon(
+                              propertyFavoriteProvider
+                                      .getPropertySavedStatus(documentId)
+                                  ? Icons.favorite
+                                  : Icons.favorite_border_outlined,
+                            ),
+                          ),
                         ),
                       ],
                     ),
