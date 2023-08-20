@@ -5,9 +5,15 @@ import 'package:grihasti/services/auth_service.dart';
 class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Future<void> signOut() async {
-      await FirebaseAuth.instance.signOut().then((value) =>
-          Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false));
+    void signOut() async {
+      // Get the FirebaseAuth instance.
+      final firebaseAuth = FirebaseAuth.instance;
+
+      // Sign out the user.
+      await firebaseAuth.signOut();
+
+      // Navigate to the login page.
+      Navigator.pushReplacementNamed(context, '/');
     }
 
     return Drawer(
