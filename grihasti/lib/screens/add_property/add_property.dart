@@ -9,7 +9,7 @@ import 'package:grihasti/screens/add_property/model/add_prop_textfield.dart';
 import 'package:grihasti/screens/add_property/components/user_repository.dart';
 import 'package:grihasti/screens/add_property/model/maps.dart';
 import 'package:grihasti/screens/add_property/model/property_model.dart';
-import 'package:grihasti/screens/add_property/model/submit.dart';
+import 'package:grihasti/screens/add_property/components/submit.dart';
 import 'package:grihasti/screens/authentication/components/my_button.dart';
 
 import 'package:grihasti/screens/homescreen/components/custom_drawer.dart';
@@ -147,6 +147,36 @@ class _AddPropertyState extends State<AddProperty> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Consumer<LocationProvider>(
+                      builder: (context, locationProvider, _) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 12.0, left: 12.0),
+                      child: Row(
+                        children: [
+                          ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        AppColors.blackColor),
+                                // Add more style configurations as needed
+                              ),
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/mapScreen');
+                              },
+                              child: const Text('Add Map')),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: locationProvider.selectedLocation != null
+                                ? Text('''
+          Latitude: ${locationProvider.selectedLocation!.latitude.toDouble()}
+          Longitude: ${locationProvider.selectedLocation!.longitude.toDouble()}
+          ''')
+                                : Text('Map location will be displayed here'),
+                          )
+                        ],
+                      ),
+                    );
+                  }),
                   AddPropTextField(
                     hintText: 'Owner Name',
                     keyboardtype: TextInputType.name,
@@ -241,6 +271,29 @@ class _AddPropertyState extends State<AddProperty> {
                     controller: detailedLocation,
                   ),
                   Padding(
+                    padding:
+                        const EdgeInsets.only(left: 8.0, right: 8.0, top: 14),
+                    child: TextFormField(
+                      maxLength: 550,
+                      keyboardType: TextInputType.multiline,
+                      controller: propertyDescription,
+                      maxLines: 5,
+                      decoration: InputDecoration(
+                        counterText: '',
+                        hintText: 'Enter Property Descripton',
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey.shade400),
+                        ),
+                        fillColor: Colors.grey.shade200,
+                        filled: true,
+                        hintStyle: TextStyle(color: Colors.grey[500]),
+                      ),
+                    ),
+                  ),
+                  Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Consumer<DropdownProvider>(
                           builder: (context, dropdownProvider, _) {
@@ -331,61 +384,6 @@ class _AddPropertyState extends State<AddProperty> {
                       ),
                     ],
                   ),
-
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 8.0, right: 8.0, top: 14),
-                    child: TextFormField(
-                      maxLength: 550,
-                      keyboardType: TextInputType.multiline,
-                      controller: propertyDescription,
-                      maxLines: 5,
-                      decoration: InputDecoration(
-                        counterText: '',
-                        hintText: 'Enter Property Descripton',
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey.shade400),
-                        ),
-                        fillColor: Colors.grey.shade200,
-                        filled: true,
-                        hintStyle: TextStyle(color: Colors.grey[500]),
-                      ),
-                    ),
-                  ),
-
-                  Consumer<LocationProvider>(
-                      builder: (context, locationProvider, _) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 12.0, left: 12.0),
-                      child: Row(
-                        children: [
-                          ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        AppColors.blackColor),
-                                // Add more style configurations as needed
-                              ),
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/mapScreen');
-                              },
-                              child: const Text('Add Map')),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: locationProvider.selectedLocation != null
-                                ? Text('''
-          Latitude: ${locationProvider.selectedLocation!.latitude.toDouble()}
-          Longitude: ${locationProvider.selectedLocation!.longitude.toDouble()}
-          ''')
-                                : Text('Map location will be displayed here'),
-                          )
-                        ],
-                      ),
-                    );
-                  }),
 
                   //For Image
                   const SizedBox(height: 8),

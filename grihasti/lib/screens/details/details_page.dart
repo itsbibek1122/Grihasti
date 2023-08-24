@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_datetime_picker_bdaya/flutter_datetime_picker_bdaya.dart';
+import 'package:grihasti/provider/booking_provider.dart';
 import 'package:grihasti/provider/favourite_provider.dart';
 
 import 'package:grihasti/provider/user_provider.dart';
-import 'package:grihasti/screens/add_property/model/submit.dart';
+
 import 'package:grihasti/screens/authentication/components/my_button.dart';
+import 'package:grihasti/screens/booked/your_bookings.dart';
 import 'package:grihasti/screens/details/components/carousel_index.dart';
 import 'package:grihasti/screens/details/components/custom_indicator.dart';
 
@@ -16,6 +19,7 @@ import 'package:grihasti/screens/homescreen/components/custom_drawer.dart';
 import 'package:grihasti/screens/homescreen/components/other_products.dart';
 import 'package:grihasti/utils/showSnackBar.dart';
 import 'package:grihasti/utils/style/colors.dart';
+import 'package:intl/intl.dart';
 
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -44,6 +48,7 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
     final imageIndexProvider = Provider.of<ImageIndexProvider>(context);
     final propertyFavoriteProvider =
         Provider.of<PropertyFavoriteProvider>(context);
+    final bookingProvider = Provider.of<BookingProvider>(context);
 
     final userId = Provider.of<UserProvider>(context).userId;
 
@@ -125,6 +130,7 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
           final kitchen = propertyData['kitchen'];
           final carparking = propertyData['carparking'];
           final bikeparking = propertyData['bikeparking'];
+          final postedBy = propertyData['userId'];
           List<dynamic> images = snapshot.data!['images'];
 
           return Stack(
@@ -359,7 +365,86 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
                     padding: const EdgeInsets.fromLTRB(25.0, 15.0, 0, 0),
                     child: Column(
                       children: [
-                        AuthenticationButton(text: 'Book', onPressed: () {}),
+                        SizedBox(
+                          height: 50,
+                          width: MediaQuery.of(context).size.width / 1.13,
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              // Get the selected date from the user
+                              DateTime? selectedDate;
+                              selectedDate =
+                                  await DatePickerBdaya.showDatePicker(context,
+                                      showTitleActions: true,
+                                      minTime: DateTime.now(),
+                                      maxTime: DateTime.now()
+                                          .add(Duration(days: 60)));
+
+                              if (selectedDate != null) {
+                                // Check if the property is already booked for the selected date
+                                final query = FirebaseFirestore.instance
+                                    .collection('bookings')
+                                    .where('propertyId',
+                                        isEqualTo: widget.documentId)
+                                    .where('bookedDate',
+                                        isGreaterThan:
+                                            selectedDate.toIso8601String())
+                                    .where(postedBy, isEqualTo: userId);
+
+                                final snapshot = await query.get();
+
+                                if (snapshot.docs.isNotEmpty) {
+                                  // The property is already booked for the selected date or before it.
+                                  mySnackBar(context,
+                                      'This property is already booked for this date');
+                                } else {
+                                  // The property is not booked for the selected date.
+                                  // Convert the selected date to ISO8601 format and store it in 'bookedDate'
+                                  String iso8601Date =
+                                      selectedDate.toIso8601String();
+
+                                  // Create the booking data
+                                  final bookingData = {
+                                    'propertyTitle': propertyTitle,
+                                    'detailedLocation': detailedLocation,
+                                    'price': price,
+                                    'bookedDate': iso8601Date,
+                                    'bookedId': userId,
+                                    'propertyId': widget.documentId,
+                                    'postedBy': postedBy,
+                                  };
+
+                                  try {
+                                    // Add the booking data to Firestore
+                                    await FirebaseFirestore.instance
+                                        .collection('bookings')
+                                        .add(bookingData);
+
+                                    // Display a success message
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                            'Booking confirmed for $selectedDate'),
+                                      ),
+                                    );
+                                  } catch (e) {
+                                    // Handle any errors that occur during booking
+                                    print("Error adding booking data: $e");
+                                  }
+                                }
+                              }
+                            },
+                            child: Text(
+                              'Book',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF1B1A25),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),

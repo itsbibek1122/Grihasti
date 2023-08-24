@@ -69,6 +69,16 @@ class CustomDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            leading: Icon(Icons.bookmark_added, color: Colors.white),
+            title: const Text(
+              'Booked Properties',
+              style: TextStyle(color: Colors.white),
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, '/booked');
+            },
+          ),
+          ListTile(
             leading:
                 Icon(Icons.supervised_user_circle_rounded, color: Colors.white),
             title: const Text(
@@ -76,7 +86,8 @@ class CustomDrawer extends StatelessWidget {
               style: TextStyle(color: Colors.white),
             ),
             onTap: () {
-              Navigator.pushNamed(context, '/profile');
+              // Navigator.pushNamed(context, '/profile');
+              Navigator.pushNamed(context, '/gScreen');
             },
           ),
           ListTile(

@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:grihasti/firebase_options.dart';
 import 'package:grihasti/provider/auth_provider.dart';
+import 'package:grihasti/provider/booking_provider.dart';
 import 'package:grihasti/provider/chip_provider.dart';
 import 'package:grihasti/provider/current_location_provider.dart';
 
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ImageIndexProvider()),
         ChangeNotifierProvider(create: (context) => DropdownProvider()),
         ChangeNotifierProvider(create: (context) => CurrentLocationProvider()),
+        ChangeNotifierProvider(create: (context) => BookingProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

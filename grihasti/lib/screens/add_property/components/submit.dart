@@ -18,7 +18,7 @@ class FirebaseService {
           await uploadPropertyImages(propertyId, propertyData.images);
 
       await firestore.collection('properties').doc(propertyId).set({
-        'userId': propertyData.userId,
+        'postedBy': propertyData.userId,
         'ownerName': propertyData.ownerName,
         'ownerNumber': propertyData.ownerNumber,
         'city': propertyData.city,
