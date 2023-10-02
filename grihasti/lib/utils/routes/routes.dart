@@ -14,6 +14,7 @@ import 'package:grihasti/screens/favourite/favourite.dart';
 import 'package:grihasti/screens/homescreen/homepage.dart';
 import 'package:grihasti/screens/homescreen/profilepage.dart';
 import 'package:grihasti/screens/homescreen/view_all.dart';
+import 'package:grihasti/screens/homescreen/your_postings.dart';
 import 'package:grihasti/screens/maps_view/maps_view.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -34,6 +35,11 @@ var routes = <String, WidgetBuilder>{
     final userId = FirebaseAuth.instance.currentUser!
         .uid; // Replace with your logic to get the user ID
     return BookedPropertiesScreen(userId);
+  },
+  '/yourpostings': (context) {
+    final userId = FirebaseAuth.instance.currentUser!
+        .uid; // Replace with your logic to get the user ID
+    return YourPostings(userId);
   },
   '/details': (context) =>
       PropertyDetailsPage(ModalRoute.of(context)!.settings.arguments as String),

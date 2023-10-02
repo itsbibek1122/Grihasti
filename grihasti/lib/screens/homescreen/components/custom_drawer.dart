@@ -59,6 +59,17 @@ class CustomDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            leading:
+                Icon(Icons.youtube_searched_for_sharp, color: Colors.white),
+            title: const Text(
+              'Your Postings',
+              style: TextStyle(color: Colors.white),
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, '/yourpostings');
+            },
+          ),
+          ListTile(
             leading: Icon(Icons.shopping_cart_checkout, color: Colors.white),
             title: const Text(
               'WishList',

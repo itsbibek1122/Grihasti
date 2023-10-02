@@ -386,18 +386,21 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
                                     .where('propertyId',
                                         isEqualTo: widget.documentId)
                                     .where('bookedDate',
-                                        isGreaterThan:
-                                            selectedDate.toIso8601String())
-                                    .where(postedBy, isEqualTo: userId);
+                                        isEqualTo:
+                                            selectedDate.toIso8601String());
 
                                 final snapshot = await query.get();
 
                                 if (snapshot.docs.isNotEmpty) {
-                                  // The property is already booked for the selected date or before it.
+                                  // The property is already booked for the selected date.
                                   mySnackBar(context,
                                       'This property is already booked for this date');
+                                } else if (postedBy == userId) {
+                                  // The user who posted the property is trying to book it.
+                                  mySnackBar(context,
+                                      'You cannot book your own property');
                                 } else {
-                                  // The property is not booked for the selected date.
+                                  // The property is not booked for the selected date, and it's not the user's own property.
                                   // Convert the selected date to ISO8601 format and store it in 'bookedDate'
                                   String iso8601Date =
                                       selectedDate.toIso8601String();

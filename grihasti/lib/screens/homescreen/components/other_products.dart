@@ -13,6 +13,8 @@ class OtherCard extends StatelessWidget {
   final String imageUrl;
   final int price;
   final String purpose;
+  final IconData? iconData;
+  final VoidCallback? onPressed;
 
   OtherCard({
     required this.title,
@@ -20,6 +22,8 @@ class OtherCard extends StatelessWidget {
     required this.imageUrl,
     required this.price,
     required this.purpose,
+    this.iconData,
+    this.onPressed,
   });
 
   @override
@@ -40,65 +44,73 @@ class OtherCard extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: [
-            Container(
-              width: 150.0,
-              height: 120.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8.0),
-                  bottomLeft: Radius.circular(8.0),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 150.0,
+                  height: 120.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8.0),
+                      bottomLeft: Radius.circular(8.0),
+                    ),
+                    image: DecorationImage(
+                      image: NetworkImage(imageUrl),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-                image: DecorationImage(
-                  image: NetworkImage(imageUrl),
-                  fit: BoxFit.cover,
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 8.0),
+                        Text(
+                          description,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        SizedBox(height: 8.0),
+                        Text(
+                          "$price /month",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 8.0),
-                    Text(
-                      description,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    SizedBox(height: 8.0),
-                    Text(
-                      "$price /month",
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            FittedBox(
-              child: Container(
-                color: AppColors.orangeColor,
-                child: Text(
-                  purpose,
-                  style: const TextStyle(
-                      fontSize: 15,
-                      color: Colors.white), // Adjust the font size as needed
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Visibility(
+                visible: iconData !=
+                    null, // Show the icon only if iconData is provided
+                child: GestureDetector(
+                  onTap: onPressed,
+                  child: Icon(
+                    iconData ?? Icons.error, // Default icon if iconData is null
+                    size: 30.0,
+                  ),
                 ),
               ),
             ),
