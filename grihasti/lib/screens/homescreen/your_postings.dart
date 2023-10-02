@@ -15,11 +15,12 @@ class YourPostings extends StatefulWidget {
 class _YourPostingsState extends State<YourPostings> {
   @override
   Widget build(BuildContext context) {
+    CollectionReference propertyCollection =
+        FirebaseFirestore.instance.collection('properties');
     return Scaffold(
       appBar: MyAppBar(title: 'Your Postings'),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('properties')
+        stream: propertyCollection
             .where('userId', isEqualTo: widget.userId)
             .snapshots(),
         builder: (context, snapshot) {
@@ -28,7 +29,7 @@ class _YourPostingsState extends State<YourPostings> {
           }
 
           if (snapshot.data!.docs.isEmpty) {
-            return Center(
+            return const Center(
               child: Text('You have not posted any properties.'),
             );
           }
@@ -40,19 +41,6 @@ class _YourPostingsState extends State<YourPostings> {
               final documentId = posting.id;
               final imageUrl = posting['images'][0];
 
-              // return ListTile(
-              //   title: Text(posting['propertyTitle']),
-              //   trailing: IconButton(
-              //     icon: Icon(Icons.delete),
-              //     onPressed: () async {
-              //       // Delete the booking from Firestore
-              //       await FirebaseFirestore.instance
-              //           .collection('postings')
-              //           .doc(posting.id)
-              //           .delete();
-              //     },
-              //   ),
-              // );
               return GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context, '/details',
@@ -66,7 +54,6 @@ class _YourPostingsState extends State<YourPostings> {
                   purpose: posting['purpose'],
                   iconData: Icons.delete,
                   onPressed: () async {
-                    print('delete clicked');
                     await FirebaseFirestore.instance
                         .collection('properties')
                         .doc(posting.id)

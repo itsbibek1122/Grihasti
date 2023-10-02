@@ -1,16 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:esewa_flutter_sdk/esewa_config.dart';
+import 'package:esewa_flutter_sdk/esewa_flutter_sdk.dart';
+import 'package:esewa_flutter_sdk/esewa_payment.dart';
+import 'package:esewa_flutter_sdk/esewa_payment_success_result.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_datetime_picker_bdaya/flutter_datetime_picker_bdaya.dart';
+import 'package:grihasti/constant/esewa.dart';
+import 'package:grihasti/esewa/esewa_class.dart';
 import 'package:grihasti/provider/booking_provider.dart';
 import 'package:grihasti/provider/favourite_provider.dart';
 
 import 'package:grihasti/provider/user_provider.dart';
 
-import 'package:grihasti/screens/authentication/components/my_button.dart';
-import 'package:grihasti/screens/booked/your_bookings.dart';
 import 'package:grihasti/screens/details/components/carousel_index.dart';
 import 'package:grihasti/screens/details/components/custom_indicator.dart';
 
@@ -19,7 +23,6 @@ import 'package:grihasti/screens/homescreen/components/custom_drawer.dart';
 import 'package:grihasti/screens/homescreen/components/other_products.dart';
 import 'package:grihasti/utils/showSnackBar.dart';
 import 'package:grihasti/utils/style/colors.dart';
-import 'package:intl/intl.dart';
 
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -400,6 +403,27 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
                                   mySnackBar(context,
                                       'You cannot book your own property');
                                 } else {
+                                  EsewaFlutterSdk.initPayment(
+                                      esewaConfig: EsewaConfig(
+                                          clientId: kEsewaClientId,
+                                          secretId: kEsewaSecretKey,
+                                          environment: Environment.test),
+                                      esewaPayment: EsewaPayment(
+                                        productId: documentId,
+                                        productName: propertyTitle,
+                                        productPrice: "1000",
+                                      ),
+                                      onPaymentSuccess:
+                                          (EsewaPaymentSuccessResult
+                                              result) async {
+                                        print('payment success');
+                                      },
+                                      onPaymentFailure: () {
+                                        print('payment faliure');
+                                      },
+                                      onPaymentCancellation: () {
+                                        print('payment canceled');
+                                      });
                                   // The property is not booked for the selected date, and it's not the user's own property.
                                   // Convert the selected date to ISO8601 format and store it in 'bookedDate'
                                   String iso8601Date =
