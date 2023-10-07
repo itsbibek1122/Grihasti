@@ -9,11 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_datetime_picker_bdaya/flutter_datetime_picker_bdaya.dart';
 import 'package:grihasti/constant/esewa.dart';
-import 'package:grihasti/esewa/esewa_class.dart';
+
 import 'package:grihasti/provider/booking_provider.dart';
 import 'package:grihasti/provider/favourite_provider.dart';
 
 import 'package:grihasti/provider/user_provider.dart';
+import 'package:grihasti/screens/authentication/components/my_button.dart';
 
 import 'package:grihasti/screens/details/components/carousel_index.dart';
 import 'package:grihasti/screens/details/components/custom_indicator.dart';
@@ -405,8 +406,10 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
                                 } else {
                                   EsewaFlutterSdk.initPayment(
                                       esewaConfig: EsewaConfig(
-                                          clientId: kEsewaClientId,
-                                          secretId: kEsewaSecretKey,
+                                          clientId:
+                                              "JB0BBQ4aD0UqIThFJwAKBgAXEUkEGQUBBAwdOgABHD4DChwUAB0R",
+                                          secretId:
+                                              "BhwIWQQADhIYSxILExMcAgFXFhcOBwAKBgAXEQ==",
                                           environment: Environment.test),
                                       esewaPayment: EsewaPayment(
                                         productId: documentId,
@@ -416,7 +419,41 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
                                       onPaymentSuccess:
                                           (EsewaPaymentSuccessResult
                                               result) async {
-                                        print('payment success');
+                                        // The property is not booked for the selected date, and it's not the user's own property.
+                                        // Convert the selected date to ISO8601 format and store it in 'bookedDate'
+                                        String iso8601Date =
+                                            selectedDate!.toIso8601String();
+
+                                        // Create the booking data
+                                        final bookingData = {
+                                          'propertyTitle': propertyTitle,
+                                          'detailedLocation': detailedLocation,
+                                          'price': price,
+                                          'bookedDate': iso8601Date,
+                                          'bookedId': userId,
+                                          'propertyId': widget.documentId,
+                                          'postedBy': postedBy,
+                                        };
+
+                                        try {
+                                          // Add the booking data to Firestore
+                                          await FirebaseFirestore.instance
+                                              .collection('bookings')
+                                              .add(bookingData);
+
+                                          // Display a success message
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                  'Booking confirmed for $selectedDate'),
+                                            ),
+                                          );
+                                        } catch (e) {
+                                          // Handle any errors that occur during booking
+                                          print(
+                                              "Error adding booking data: $e");
+                                        }
                                       },
                                       onPaymentFailure: () {
                                         print('payment faliure');
@@ -424,39 +461,6 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
                                       onPaymentCancellation: () {
                                         print('payment canceled');
                                       });
-                                  // The property is not booked for the selected date, and it's not the user's own property.
-                                  // Convert the selected date to ISO8601 format and store it in 'bookedDate'
-                                  String iso8601Date =
-                                      selectedDate.toIso8601String();
-
-                                  // Create the booking data
-                                  final bookingData = {
-                                    'propertyTitle': propertyTitle,
-                                    'detailedLocation': detailedLocation,
-                                    'price': price,
-                                    'bookedDate': iso8601Date,
-                                    'bookedId': userId,
-                                    'propertyId': widget.documentId,
-                                    'postedBy': postedBy,
-                                  };
-
-                                  try {
-                                    // Add the booking data to Firestore
-                                    await FirebaseFirestore.instance
-                                        .collection('bookings')
-                                        .add(bookingData);
-
-                                    // Display a success message
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                            'Booking confirmed for $selectedDate'),
-                                      ),
-                                    );
-                                  } catch (e) {
-                                    // Handle any errors that occur during booking
-                                    print("Error adding booking data: $e");
-                                  }
                                 }
                               }
                             },
@@ -472,6 +476,11 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
                             ),
                           ),
                         ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        AuthenticationButton(
+                            text: 'Calculate Emi', onPressed: () {})
                       ],
                     ),
                   ),
