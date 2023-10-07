@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:grihasti/screens/homescreen/components/custom_appbar.dart';
 
 class BookedPropertiesScreen extends StatefulWidget {
   final String userId;
@@ -14,9 +15,7 @@ class _BookedPropertiesScreenState extends State<BookedPropertiesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Your Booked Properties'),
-      ),
+      appBar: MyAppBar(title: 'Properties Booked'),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('bookings')

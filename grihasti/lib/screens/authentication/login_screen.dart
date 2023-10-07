@@ -138,7 +138,7 @@ class LoginScreen extends StatelessWidget {
                 // google + apple sign in buttons
                 GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, '/gScreen');
+                      Navigator.pushNamed(context, '/error');
                     },
                     child: SquareTile(imagePath: 'assets/images/google.png')),
 

@@ -9,7 +9,7 @@ class GScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(
-        title: 'Default Tab',
+        title: 'Profile',
       ),
       drawer: CustomDrawer(),
       body: Center(child: CircularProgressIndicator()),

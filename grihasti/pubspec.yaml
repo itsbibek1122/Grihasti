@@ -58,6 +58,7 @@ dependencies:
   permission_handler: ^10.4.3
   shared_preferences: ^2.2.0
   intl: ^0.18.1
+  another_flutter_splash_screen: ^1.1.7
 
 dev_dependencies:
   flutter_test:
