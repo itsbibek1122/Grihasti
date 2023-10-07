@@ -18,7 +18,7 @@ class FirebaseService {
           await uploadPropertyImages(propertyId, propertyData.images);
 
       await firestore.collection('properties').doc(propertyId).set({
-        'postedBy': propertyData.userId,
+        'userId': propertyData.userId,
         'ownerName': propertyData.ownerName,
         'ownerNumber': propertyData.ownerNumber,
         'city': propertyData.city,
@@ -36,7 +36,7 @@ class FirebaseService {
         'images': imageUrls,
         'premium': 'No',
         'date': DateTime.now(),
-        'bookedBy': null,
+
         // Store the image URLs in the Firestore document
       });
     } catch (e) {

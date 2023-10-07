@@ -430,7 +430,7 @@ class _PropertyDetailsPageState extends State<PropertyDetailsPage> {
                                           'detailedLocation': detailedLocation,
                                           'price': price,
                                           'bookedDate': iso8601Date,
-                                          'bookedId': userId,
+                                          'bookedId': userId.toString(),
                                           'propertyId': widget.documentId,
                                           'postedBy': postedBy,
                                         };

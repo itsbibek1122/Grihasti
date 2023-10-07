@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:grihasti/provider/user_provider.dart';
 import 'package:grihasti/screens/homescreen/components/custom_appbar.dart';
 import 'package:grihasti/screens/homescreen/components/other_products.dart';
+import 'package:provider/provider.dart';
 
 class YourPostings extends StatefulWidget {
   final String userId;
@@ -15,14 +17,15 @@ class YourPostings extends StatefulWidget {
 class _YourPostingsState extends State<YourPostings> {
   @override
   Widget build(BuildContext context) {
+    final userId = Provider.of<UserProvider>(context).userId;
     CollectionReference propertyCollection =
         FirebaseFirestore.instance.collection('properties');
+
     return Scaffold(
       appBar: MyAppBar(title: 'Your Postings'),
       body: StreamBuilder<QuerySnapshot>(
-        stream: propertyCollection
-            .where('userId', isEqualTo: widget.userId)
-            .snapshots(),
+        stream:
+            propertyCollection.where('userId', isEqualTo: userId).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return CircularProgressIndicator();

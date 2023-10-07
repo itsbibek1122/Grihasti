@@ -50,6 +50,7 @@ class _AddPropertyState extends State<AddProperty> {
       context,
     );
     final userId = Provider.of<UserProvider>(context).userId;
+    print(userId);
     final dropdownProvider = Provider.of<DropdownProvider>(context);
 
     List<String> bedrooms = ["1", "2", "3", "4", "5"];
@@ -66,6 +67,7 @@ class _AddPropertyState extends State<AddProperty> {
           detailedLocation.text.isEmpty ||
           propertyDescription.text.isEmpty ||
           locationProvider.selectedLocation == null ||
+          imagePickerController.hasNoImages ||
           chipOptions.selectedCityIndex == -1 ||
           chipOptions.selectedPurposeIndex == -1 ||
           dropdownProvider.selectedBathrooms.isEmpty ||
